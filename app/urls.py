@@ -1,8 +1,8 @@
-from django.conf.urls import url
+from rest_framework import routers
 from app import views
 
-urlpatterns = [
-    url('^teams$', views.TeamList.as_view()),
-    url('^teams/(?P<pk>[0-9]+)$', views.TeamDetail.as_view()),
-    #url('^teams$', )
-]
+
+router = routers.DefaultRouter(trailing_slash=False)
+router.register('teams', views.TeamViewSet)
+router.register('players', views.PlayerViewSet)
+urlpatterns = router.urls
