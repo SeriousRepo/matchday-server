@@ -16,3 +16,11 @@ class Player(models.Model):
     first_name = models.CharField(max_length=50)
     birth_date = models.DateField()
     team = models.ForeignKey(Team, related_name='players', on_delete=models.CASCADE)
+
+
+class Match(models.Model):
+    date = models.DateTimeField()
+    home_goals = models.IntegerField()
+    away_goals = models.IntegerField()
+    home_team = models.ForeignKey(Team, related_name='home_matches', on_delete=models.CASCADE)
+    away_team = models.ForeignKey(Team, related_name='away_matches', on_delete=models.CASCADE)
