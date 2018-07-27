@@ -3,10 +3,12 @@ from app import views
 
 
 router = routers.DefaultRouter()
-router.register(r'teams', views.TeamViewSet)
-router.register(r'teams/(?P<team_id>\d+)/players', views.PlayerPerTeamViewSet, base_name='team')
-router.register(r'teams/(?P<team_id>\d+)/home_matches', views.HomeMatchPerTeamViewSet, base_name='team')
-router.register(r'teams/(?P<team_id>\d+)/away_matches', views.AwayMatchPerTeamViewSet, base_name='team')
+router.register(r'users', views.UserViewSet)
+router.register(r'persons', views.PersonViewSet)
 router.register(r'players', views.PlayerViewSet)
 router.register(r'matches', views.MatchViewSet)
+router.register(r'competitions', views.CompetitionViewSet)
+router.register(r'competitions/(?P<competition_id>\d+)/matches',
+                views.MatchPerCompetitionViewSet, base_name='competition')
+
 urlpatterns = router.urls

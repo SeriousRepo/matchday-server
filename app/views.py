@@ -1,11 +1,16 @@
 from rest_framework import viewsets
-from app.models import Team, Player, Match
-from app.serializers import TeamSerializer, PlayerSerializer, MatchSerializer
+from app.models import User, Person, Player, Match, Competition
+from app.serializers import UserSerializer, PersonSerializer, PlayerSerializer, MatchSerializer, CompetitionSerializer
 
 
-class TeamViewSet(viewsets.ModelViewSet):
-    queryset = Team.objects.all()
-    serializer_class = TeamSerializer
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class PersonViewSet(viewsets.ModelViewSet):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
 
 
 class PlayerViewSet(viewsets.ModelViewSet):
@@ -13,30 +18,19 @@ class PlayerViewSet(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
 
 
-class PlayerPerTeamViewSet(viewsets.ModelViewSet):
-    serializer_class = PlayerSerializer
-
-    def get_queryset(self):
-        team_id = self.kwargs['team_id']
-        return Player.objects.filter(team=team_id)
-
-
 class MatchViewSet(viewsets.ModelViewSet):
     queryset = Match.objects.all()
     serializer_class = MatchSerializer
 
 
-class HomeMatchPerTeamViewSet(viewsets.ModelViewSet):
+class MatchPerCompetitionViewSet(viewsets.ModelViewSet):
     serializer_class = MatchSerializer
 
     def get_queryset(self):
-        team_id = self.kwargs['team_id']
-        return Match.objects.filter(home_team=team_id)
+        competition_id = self.kwargs['competition_id']
+        return Match.objects.filter(competition=competition_id)
 
 
-class AwayMatchPerTeamViewSet(viewsets.ModelViewSet):
-    serializer_class = MatchSerializer
-
-    def get_queryset(self):
-        team_id = self.kwargs['team_id']
-        return Match.objects.filter(away_team=team_id)
+class CompetitionViewSet(viewsets.ModelViewSet):
+    queryset = Competition.objects.all()
+    serializer_class = CompetitionSerializer
