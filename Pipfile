@@ -3,7 +3,6 @@
 django = "*"
 gunicorn = "*"
 djangorestframework = "*"
-Markdown = "*"
 django-heroku = "*"
 
 [requires]
