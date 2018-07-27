@@ -1,0 +1,11 @@
+[packages]
+
+django = "*"
+gunicorn = "*"
+djangorestframework = "*"
+Markdown = "*"
+django-heroku = "*"
+
+[requires]
+
+python_version = "3.6"
