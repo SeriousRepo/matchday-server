@@ -4,7 +4,7 @@ from app import views
 
 router = routers.DefaultRouter()
 router.register(r'^users', views.UserViewSet)
-router.register(r'^persons', views.PersonViewSet)
+router.register(r'^people', views.PersonViewSet)
 router.register(r'^players', views.PlayerViewSet)
 router.register(r'^matches', views.MatchViewSet)
 router.register(r'^competitions', views.CompetitionViewSet)
