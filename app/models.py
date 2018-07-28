@@ -13,7 +13,7 @@ class Person(models.Model):
 
     last_name = models.CharField(max_length=50)
     first_name = models.CharField(max_length=50)
-    role = models.CharField(max_length=50, choices=RoleChoices)
+    role = models.CharField(max_length=10, choices=RoleChoices)
     birth_date = models.DateField()
 
 
