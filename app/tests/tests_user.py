@@ -38,7 +38,7 @@ class ReadUserTest(UserTestSetUp):
         self.post_both_users()
 
     def test_read_user_list(self):
-        response = self.client.get(reverse('users-list'))
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data[0], self.first_user)
         self.assertEqual(response.data[1], self.second_user)
