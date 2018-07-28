@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6668071e9b58653ce686dcdd8cd1666d51acce582cfb0534ff219fb0980a0263"
+            "sha256": "aa9d7d86a834163d8cd6c0daf4a1aed5d3f3fde7cdcd9c339a33332140dd84d4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -10,7 +10,7 @@
         "sources": [
             {
                 "name": "pypi",
-                "url": "https://pypi.org/simple",
+                "url": "https://pypi.python.org/simple",
                 "verify_ssl": true
             }
         ]
@@ -54,14 +54,6 @@
             ],
             "index": "pypi",
             "version": "==19.9.0"
-        },
-        "markdown": {
-            "hashes": [
-                "sha256:9ba587db9daee7ec761cfc656272be6aabe2ed300fece21208e4aab2e457bc8f",
-                "sha256:a856869c7ff079ad84a3e19cd87a64998350c2b94e9e08e44270faef33400f81"
-            ],
-            "index": "pypi",
-            "version": "==2.6.11"
         },
         "psycopg2": {
             "hashes": [
