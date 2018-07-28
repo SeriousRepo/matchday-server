@@ -34,7 +34,7 @@ class CreatePersonTest(PersonTestSetUp):
         self.assertEqual(Person.objects.count(), 2)
         self.assertEqual(Person.objects.get(pk=2), self.second_model)
 
-    def test_not_create_with_wrong_role(self):
+    def test_not_create_person_with_wrong_role(self):
         first_model = Person(pk=1, last_name='LastName1', first_name='FirstName1',
                              role='WrongRole', birth_date=date(1961, 5, 13))
         first_person = PersonSerializer(first_model).data
