@@ -29,26 +29,14 @@ class PlayerSerializer(serializers.ModelSerializer):
 
 
 class MatchSerializer(serializers.ModelSerializer):
-    main_referee = PersonSerializer(required=True)
-
+    #main_referee = serializers.HyperlinkedRelatedField(queryset=Person.objects.all(), view_name='people-detail')
+    #competition = serializers.HyperlinkedRelatedField(queryset=Competition.objects.all(), view_name='competitions-detail')
     class Meta:
         model = Match
         fields = ('id', 'date', 'main_referee', 'competition')
 
-    def create(self, validated_data):
-        main_referee_data = validated_data.pop('main_referee')
-        main_referee = PersonSerializer.create(PersonSerializer(), validated_data=main_referee_data)
-        match, created = Match.objects.update_or_create(date=validated_data.pop('date'),
-                                                        main_referee=main_referee,
-                                                        competition=validated_data.pop('competition'))
-        return match
-
 
 class CompetitionSerializer(serializers.ModelSerializer):
-    matches = serializers.HyperlinkedRelatedField(many=True,
-                                                  read_only=True,
-                                                  view_name='match-detail')
-
     class Meta:
         model = Competition
-        fields = ('id', 'name', 'type', 'matches')
+        fields = ('id', 'name', 'type')

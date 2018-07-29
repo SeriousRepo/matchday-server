@@ -38,5 +38,5 @@ class Competition(models.Model):
 
 class Match(models.Model):
     date = models.DateTimeField()
-    main_referee = models.OneToOneField('Person', on_delete=models.CASCADE)
-    competition = models.ForeignKey(Competition, related_name='matches', on_delete=models.CASCADE)
+    main_referee = models.ForeignKey(Person, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
