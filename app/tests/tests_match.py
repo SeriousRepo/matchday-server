@@ -1,9 +1,9 @@
-from rest_framework.reverse import reverse, reverse_lazy
+from rest_framework.reverse import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIRequestFactory
+from datetime import date, datetime
 from app.models import Match, Person, Competition
 from app.serializers import MatchSerializer, PersonSerializer, CompetitionSerializer
-from datetime import date, datetime
 
 
 # ToDo add more referees and competitions
@@ -19,6 +19,7 @@ class MatchTestSetUp(APITestCase):
         self.first_competition = CompetitionSerializer(self.first_competition_model).data
         self.client.post(reverse('people-list'), self.first_referee, format='json')
         self.client.post(reverse('competitions-list'), self.first_competition, format='json')
+        self.context = {'request': APIRequestFactory().get('/')}
 
     def post_first_match(self):
         self.set_first_match()
@@ -27,13 +28,12 @@ class MatchTestSetUp(APITestCase):
     def set_first_match(self):
         self.first_model = Match(pk=1, date=datetime(2018, 11, 10, 20, 45),
                                  main_referee=self.first_referee_model, competition=self.first_competition_model)
-        self.first_match = MatchSerializer(self.first_model).data
-        self.first_match.main_referee = reverse_lazy('api-root', request=self.client.get('/people/{}/'.format(self.first_model.main_referee.pk)))
+        self.first_match = MatchSerializer(self.first_model, context=self.context).data
 
     def set_second_match(self):
         self.second_model = Match(pk=2, date=datetime(2019, 1, 3, 20, 45),
                                   main_referee=self.first_referee_model, competition=self.first_competition_model)
-        self.second_match = MatchSerializer(self.second_model).data
+        self.second_match = MatchSerializer(self.second_model, context=self.context).data
 
     def post_both_matches(self):
         self.set_first_match()
@@ -84,7 +84,7 @@ class UpdateMatchTest(MatchTestSetUp):
         self.post_nested()
         self.second_model = Match(pk=1, date=datetime(2019, 1, 3, 20, 45),
                                   main_referee=self.first_referee_model, competition=self.first_competition_model)
-        self.second_match = MatchSerializer(self.second_model).data
+        self.second_match = MatchSerializer(self.second_model, context=self.context).data
         self.post_first_match()
 
     def test_update_match(self):

@@ -13,6 +13,16 @@ class PersonViewSet(viewsets.ModelViewSet):
     serializer_class = PersonSerializer
 
 
+class RefereeViewSet(viewsets.ModelViewSet):
+    queryset = Person.objects.filter(role='referee')
+    serializer_class = PersonSerializer
+
+
+class CoachViewSet(viewsets.ModelViewSet):
+    queryset = Person.objects.filter(role='coach')
+    serializer_class = PersonSerializer
+
+
 class PlayerViewSet(viewsets.ModelViewSet):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
