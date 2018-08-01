@@ -14,7 +14,8 @@ class Person(models.Model):
     last_name = models.CharField(max_length=50)
     first_name = models.CharField(max_length=50)
     role = models.CharField(max_length=10, choices=RoleChoices)
-    birth_date = models.DateField()
+    birth_date = models.DateField(null=True)
+    nationality = models.CharField(max_length=50, null=True)
 
 
 class Player(models.Model):
@@ -26,7 +27,7 @@ class Player(models.Model):
 
     position = models.CharField(max_length=3, choices=PositionChoices)
     person = models.OneToOneField(Person, on_delete=models.CASCADE)
-    # ? team = models.ForeignKey('Team', related_name='players', on_delete=models.CASCADE)
+    team = models.ForeignKey('Team', on_delete=models.CASCADE)
 
 
 class Competition(models.Model):
@@ -40,3 +41,18 @@ class Match(models.Model):
     date = models.DateTimeField()
     main_referee = models.ForeignKey(Person, on_delete=models.CASCADE)
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
+
+
+class Team(models.Model):
+    name = models.CharField(max_length=50)
+    points = models.IntegerField()
+    goals_scored = models.IntegerField()
+    goals_conceded = models.IntegerField()
+
+
+class MatchTeam(models.Model):
+    goals_amount = models.IntegerField()
+    is_host = models.BooleanField()
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    match = models.ForeignKey(Match, on_delete=models.CASCADE)
+    coach = models.ForeignKey(Person, on_delete=models.CASCADE)

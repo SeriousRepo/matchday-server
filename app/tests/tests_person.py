@@ -8,10 +8,10 @@ from datetime import date
 
 class PersonTestSetUp(APITestCase):
     first_model = Person(pk=1, last_name='LastName1', first_name='FirstName1',
-                         role='coach', birth_date=date(1961, 5, 13))
+                         role='coach', birth_date=date(1961, 5, 13), nationality='French')
     first_person = PersonSerializer(first_model).data
     second_model = Person(pk=2, last_name='LastName2', first_name='FirstName2',
-                          role='player', birth_date=date(1979, 1, 12))
+                          role='player', birth_date=date(1979, 1, 12), nationality='Polish')
     second_person = PersonSerializer(second_model).data
     url = reverse('people-list')
 
@@ -65,7 +65,7 @@ class ReadPersonTest(PersonTestSetUp):
 class UpdatePersonTest(PersonTestSetUp):
     def setUp(self):
         self.second_model = Person(pk=1, last_name='LastName2', first_name='FirstName2',
-                                   role='player', birth_date=date(1979, 1, 12))
+                                   role='player', birth_date=date(1979, 1, 12), nationality='Polish')
         self.second_person = PersonSerializer(self.second_model).data
         self.post_first_person()
 

@@ -1,6 +1,8 @@
 from rest_framework import viewsets
-from app.models import User, Person, Player, Match, Competition
-from app.serializers import UserSerializer, PersonSerializer, PlayerSerializer, MatchSerializer, CompetitionSerializer
+from app.models import User, Person, Player, Match, Competition, Team, MatchTeam
+from app.serializers import UserSerializer, PersonSerializer, PlayerSerializer,\
+                            MatchSerializer, CompetitionSerializer, TeamSerializer,\
+                            MatchTeamSerializer
 
 
 class UsersViewSet(viewsets.ModelViewSet):
@@ -52,3 +54,13 @@ class MatchesPerCompetitionViewSet(viewsets.ModelViewSet):
 class CompetitionsViewSet(viewsets.ModelViewSet):
     queryset = Competition.objects.all()
     serializer_class = CompetitionSerializer
+
+
+class TeamViewSet(viewsets.ModelViewSet):
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
+
+
+class MatchTeamViewSet(viewsets.ModelViewSet):
+    queryset = MatchTeam.objects.all()
+    serializer_class = MatchTeamSerializer

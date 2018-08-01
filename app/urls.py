@@ -13,5 +13,7 @@ router.register(r'competitions/(?P<competition_id>\d+)/matches',
                 views.MatchesPerCompetitionViewSet, base_name='matches_in_competition')
 router.register(r'competitions/(?P<competition_id>\d+)/referees',
                 views.RefereesPerCompetitionViewSet, base_name='referees_in_competition')
+router.register(r'teams', views.TeamViewSet, base_name='teams')
+router.register(r'match_team', views.MatchTeamViewSet, base_name='match_team')
 
 urlpatterns = router.urls
