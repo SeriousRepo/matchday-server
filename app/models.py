@@ -3,7 +3,7 @@ from django.db import models
 
 class User(models.Model):
     email = models.CharField(max_length=100)
-    hash_password = models.CharField(max_length=250)
+    #hash_password = models.CharField(max_length=250)
     join_date = models.DateField()
 
 
@@ -25,8 +25,8 @@ class Player(models.Model):
     # ToDo fill more positions
 
     position = models.CharField(max_length=3, choices=PositionChoices)
-    person = models.OneToOneField(Person, on_delete=models.CASCADE)
     team = models.ForeignKey('Team', on_delete=models.CASCADE)
+    person = models.OneToOneField(Person, on_delete=models.CASCADE)
 
 
 class Competition(models.Model):
@@ -58,7 +58,7 @@ class MatchTeam(models.Model):
 class EventInfo(models.Model):
     real_time = models.TimeField()
     match_minute = models.IntegerField()
-    rank_points = models.IntegerField
+    rank_points = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
@@ -71,7 +71,8 @@ class MatchEvent(models.Model):
 class TeamEvent(models.Model):
     TypeChoices = (('substitution', 'substitution'), ('assist', 'assist'), ('goal', 'goal'),
                    ('red card', 'red card'), ('yellow card', 'yellow card'))
-    event_type = models.CharField(max_length=50)
+
+    event_type = models.CharField(max_length=50, choices=TypeChoices)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     match_team = models.ForeignKey(MatchTeam, on_delete=models.CASCADE)
     event = models.OneToOneField(EventInfo, on_delete=models.CASCADE)
