@@ -63,43 +63,48 @@ class EventInfo(models.Model):
 
 
 class MatchEvent(models.Model):
+    TypeChoices = (('first whistle', 'first whistle'), ('last whistle', 'last whistle'),
+                   ('end of first half', 'end of first half'), ('begin of second half', 'begin of second half'),
+                   ('end of second half', 'end of second half'), ('begin of extra time', 'begin of extra time'),
+                   ('begin of extra time second half', 'begin of extra time second half'),
+                   ('end of extra time first half', 'end of extra time first half'),
+                   ('end of extra time second half', 'end of extra time second half'),
+                   ('begin of penalty shoots', 'begin of penalty shoots'))
+
     description = models.CharField(max_length=50)
+    event_type = models.CharField(max_length=100, choices=TypeChoices)
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
-    event = models.OneToOneField(EventInfo, on_delete=models.CASCADE)
+    event_info = models.OneToOneField(EventInfo, on_delete=models.CASCADE)
 
 
 class TeamEvent(models.Model):
-    TypeChoices = (('substitution', 'substitution'), ('assist', 'assist'), ('goal', 'goal'),
-                   ('red card', 'red card'), ('yellow card', 'yellow card'))
-
-    event_type = models.CharField(max_length=50, choices=TypeChoices)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     match_team = models.ForeignKey(MatchTeam, on_delete=models.CASCADE)
-    event = models.OneToOneField(EventInfo, on_delete=models.CASCADE)
+    event_info = models.OneToOneField(EventInfo, on_delete=models.CASCADE)
 
 
 class Goal(models.Model):
     description = models.CharField(max_length=50, null=True)
-    event = models.OneToOneField(EventInfo, on_delete=models.CASCADE)
+    team_event = models.OneToOneField(TeamEvent, on_delete=models.CASCADE)
 
 
 class RedCard(models.Model):
     reason = models.CharField(max_length=50, null=True)
-    event = models.OneToOneField(EventInfo, on_delete=models.CASCADE)
+    team_event = models.OneToOneField(TeamEvent, on_delete=models.CASCADE)
 
 
 class YellowCard(models.Model):
     reason = models.CharField(max_length=50, null=True)
-    event = models.OneToOneField(EventInfo, on_delete=models.CASCADE)
+    team_event = models.OneToOneField(TeamEvent, on_delete=models.CASCADE)
 
 
 class Substitution(models.Model):
     reason = models.CharField(max_length=50, null=True)
-    event = models.OneToOneField(EventInfo, on_delete=models.CASCADE)
     substituted_by = models.OneToOneField(Player, on_delete=models.CASCADE)
+    team_event = models.OneToOneField(TeamEvent, on_delete=models.CASCADE)
 
 
 class Assist(models.Model):
     description = models.CharField(max_length=50, null=True)
-    event = models.OneToOneField(EventInfo, on_delete=models.CASCADE)
     assisted_to = models.OneToOneField(Player, on_delete=models.CASCADE)
+    team_event = models.OneToOneField(TeamEvent, on_delete=models.CASCADE)
