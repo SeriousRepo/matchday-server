@@ -1,11 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
-class User(models.Model):
-    email = models.CharField(max_length=100)
-    #hash_password = models.CharField(max_length=250)
+"""class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     join_date = models.DateField()
-
+"""
 
 class Person(models.Model):
     RoleChoices = (('coach', 'coach'), ('player', 'player'), ('referee', 'referee'),)

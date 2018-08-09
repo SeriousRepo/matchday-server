@@ -17,6 +17,16 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    )
+}
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -26,9 +36,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
-    'app.apps.AppConfig'
+    'rest_framework.authtoken',
+    'rest_auth',
+    'rest_auth.registration',
+    'app.apps.AppConfig',
+    'allauth',
+    'allauth.account',
 ]
+
+SITE_ID = 1
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'matchday'
+EMAIL_HOST_PASSWORD = 'MatchDaypwd0'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

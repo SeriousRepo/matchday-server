@@ -1,12 +1,27 @@
 from rest_framework import serializers
+from rest_auth.serializers import UserDetailsSerializer
 from app.models import *
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'email', 'join_date')
+"""class UserSerializer(UserDetailsSerializer):
 
+    join_date = serializers.DateField(source="userprofile.join_date")
+
+    class Meta(UserDetailsSerializer.Meta):
+        fields = UserDetailsSerializer.Meta.fields + ('join_date',)
+
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('userprofile', {})
+        join_date = profile_data.get('join_date')
+
+        instance = super(UserSerializer, self).update(instance, validated_data)
+
+        profile = instance.userprofile
+        if profile_data and join_date:
+            profile.join_date = join_date
+            profile.save()
+        return instance
+"""
 
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:

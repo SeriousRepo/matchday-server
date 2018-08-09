@@ -3,7 +3,7 @@ from app import views
 
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UsersViewSet, base_name='users')
+#router.register(r'users', views.UsersViewSet, base_name='users')
 router.register(r'people', views.PersonsViewSet, base_name='people')
 router.register(r'referees', views.RefereesViewSet, base_name='referees')
 router.register(r'players', views.PlayersViewSet, base_name='players')
@@ -15,7 +15,6 @@ router.register(r'competitions/(?P<competition_id>\d+)/referees',
                 views.RefereesPerCompetitionViewSet, base_name='referees_in_competition')
 router.register(r'teams', views.TeamsViewSet, base_name='teams')
 router.register(r'match_team', views.MatchTeamsViewSet, base_name='match_teams')
-# router.register(r'events', views.EventInfosViewSet, base_name='events')
 router.register(r'match_events', views.MatchEventsViewSet, base_name='match_events')
 router.register(r'team_events', views.TeamEventsViewSet, base_name='team_events')
 router.register(r'goals', views.GoalsViewSet, base_name='goals')
