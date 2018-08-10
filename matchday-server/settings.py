@@ -1,6 +1,8 @@
 import os
 import django_heroku
 
+from .sensitive import *
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -49,8 +51,8 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'matchday'
-EMAIL_HOST_PASSWORD = 'MatchDaypwd0'
+EMAIL_HOST_USER = email_user
+EMAIL_HOST_PASSWORD = email_password
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
