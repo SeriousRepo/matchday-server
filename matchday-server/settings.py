@@ -1,7 +1,13 @@
 import os
 import django_heroku
+from django.core.exceptions import ImproperlyConfigured
 
-from .sensitive import *
+try:
+    LOGIN_EMAIL = os.environ.get('EMAIL_USER')
+    PASSWORD_EMAIL = os.environ.get('EMAIL_PASSWORD')
+except KeyError:
+    error_msg = "cannot find environment variable"
+    raise ImproperlyConfigured(error_msg)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -51,8 +57,8 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = email_user
-EMAIL_HOST_PASSWORD = email_password
+EMAIL_HOST_USER = LOGIN_EMAIL
+EMAIL_HOST_PASSWORD = PASSWORD_EMAIL
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
