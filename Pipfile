@@ -11,8 +11,6 @@ gunicorn = "*"
 djangorestframework = "*"
 django-heroku = "*"
 coreapi = "*"
-django-rest-auth = "*"
-django-allauth = "*"
 
 [requires]
 
