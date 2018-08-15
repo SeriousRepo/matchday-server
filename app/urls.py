@@ -1,10 +1,15 @@
+from django.conf.urls import url
 from rest_framework import routers
 from app import views
 
+urlpatterns = [
+    url(r'registration/$', views.UserCreateView.as_view(), name='account-create'),
+    url(r'login/$', views.UserLoginView.as_view(), name='account-login')
+]
 
 router = routers.DefaultRouter()
-#router.register(r'users', views.UsersViewSet, base_name='users')
-router.register(r'people', views.PersonsViewSet, base_name='people')
+router.register(r'users', views.UsersViewSet, base_name='users')
+router.register(r'people', views.PeopleViewSet, base_name='people')
 router.register(r'referees', views.RefereesViewSet, base_name='referees')
 router.register(r'players', views.PlayersViewSet, base_name='players')
 router.register(r'matches', views.MatchesViewSet, base_name='matches')
@@ -23,4 +28,4 @@ router.register(r'yellow_cards', views.YellowCardsViewSet, base_name='yellow_car
 router.register(r'substitutions', views.SubstitutionsViewSet, base_name='substitutions')
 router.register(r'assists', views.AssistsViewSet, base_name='assists')
 
-urlpatterns = router.urls
+urlpatterns += router.urls

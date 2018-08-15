@@ -2,12 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-"""class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    join_date = models.DateField()
-"""
-
 class Person(models.Model):
     RoleChoices = (('coach', 'coach'), ('player', 'player'), ('referee', 'referee'),)
 

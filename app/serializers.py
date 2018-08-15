@@ -1,27 +1,46 @@
 from rest_framework import serializers
-from rest_auth.serializers import UserDetailsSerializer
+from rest_framework.validators import UniqueValidator
+from django.utils import timezone
 from app.models import *
 
 
-"""class UserSerializer(UserDetailsSerializer):
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'date_joined')
 
-    join_date = serializers.DateField(source="userprofile.join_date")
 
-    class Meta(UserDetailsSerializer.Meta):
-        fields = UserDetailsSerializer.Meta.fields + ('join_date',)
+class CreateUserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+            required=True,
+            validators=[UniqueValidator(queryset=User.objects.all())]
+            )
+    username = serializers.CharField(
+            max_length=100,
+            required=True,
+            validators=[UniqueValidator(queryset=User.objects.all())]
+            )
+    password = serializers.CharField(required=True, min_length=8, write_only=True)
+    joined_date = serializers.DateTimeField(default=timezone.now)
 
-    def update(self, instance, validated_data):
-        profile_data = validated_data.pop('userprofile', {})
-        join_date = profile_data.get('join_date')
+    def create(self, validated_data):
+        user = User.objects.create_user(validated_data['username'], validated_data['email'],
+                                        validated_data['password'])
+        return user
 
-        instance = super(UserSerializer, self).update(instance, validated_data)
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'password', 'joined_date')
 
-        profile = instance.userprofile
-        if profile_data and join_date:
-            profile.join_date = join_date
-            profile.save()
-        return instance
-"""
+
+class LoginUserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True, write_only=True)
+
+    class Meta:
+        model = User
+        fields = ('email', 'password')
+
 
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:

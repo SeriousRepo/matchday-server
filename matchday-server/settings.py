@@ -47,20 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth',
-    'rest_auth.registration',
     'app.apps.AppConfig',
-    'allauth',
-    'allauth.account',
 ]
-
-SITE_ID = 1
-
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = LOGIN_EMAIL
-EMAIL_HOST_PASSWORD = PASSWORD_EMAIL
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -90,8 +78,15 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'matchday-server.wsgi.application'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = LOGIN_EMAIL
+EMAIL_HOST_PASSWORD = PASSWORD_EMAIL
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
+WSGI_APPLICATION = 'matchday-server.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases

@@ -1,13 +1,42 @@
-from rest_framework import viewsets
+from rest_framework import status, viewsets, generics
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from app.serializers import *
 
 
-"""class UsersViewSet(viewsets.ModelViewSet):
-    queryset = UserProfile.objects.all()
+class UsersViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
     serializer_class = UserSerializer
-"""
 
-class PersonsViewSet(viewsets.ModelViewSet):
+
+class UserCreateView(APIView):
+    def post(self, request):
+        serializer = CreateUserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            if user:
+                token = Token.objects.create(user=user)
+                json = serializer.data
+                json['token'] = token.key
+                return Response(json, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserLoginView(APIView):
+    def post(self, request):
+        serializer = LoginUserSerializer(data=request.data)
+        serializer.is_valid()
+        user = User.objects.get(email=serializer.validated_data['email'])
+        token = Token.objects.get(user=user)
+        response_data = {
+            'email': user.email,
+            'token': token.key
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
+
+
+class PeopleViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
 
