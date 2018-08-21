@@ -1,10 +1,11 @@
 from django.conf.urls import url
 from rest_framework import routers
 from app import views
+from rest_framework.authtoken import views as rest_views
 
 urlpatterns = [
     url(r'registration/$', views.UserCreateView.as_view(), name='account-create'),
-    url(r'login/$', views.UserLoginView.as_view(), name='account-login')
+    url(r'get_token/$', rest_views.obtain_auth_token)
 ]
 
 router = routers.DefaultRouter()

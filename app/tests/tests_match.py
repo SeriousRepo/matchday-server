@@ -8,7 +8,7 @@ from app.serializers import MatchSerializer, PersonSerializer, CompetitionSerial
 
 # ToDo add more referees and competitions
 
-class MatchTestSetUp(APITestCase):
+"""class MatchTestSetUp(APITestCase):
     url = reverse('matches-list')
 
     def post_nested(self):
@@ -107,3 +107,4 @@ class DeleteMatchTest(MatchTestSetUp):
         response = self.client.delete('/matches/{}/'.format(self.second_model.pk))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Match.objects.count(), 0)
+"""

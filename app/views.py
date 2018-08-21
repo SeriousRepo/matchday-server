@@ -1,5 +1,6 @@
-from rest_framework import status, viewsets, generics
+from rest_framework import status, viewsets
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from app.serializers import *
@@ -11,6 +12,7 @@ class UsersViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class UserCreateView(APIView):
+    permission_classes = (AllowAny,)
     def post(self, request):
         serializer = CreateUserSerializer(data=request.data)
         if serializer.is_valid():
@@ -23,35 +25,22 @@ class UserCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserLoginView(APIView):
-    def post(self, request):
-        serializer = LoginUserSerializer(data=request.data)
-        serializer.is_valid()
-        user = User.objects.get(email=serializer.validated_data['email'])
-        token = Token.objects.get(user=user)
-        response_data = {
-            'email': user.email,
-            'token': token.key
-        }
-        return Response(response_data, status=status.HTTP_200_OK)
-
-
 class PeopleViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
 
 
-class RefereesViewSet(viewsets.ModelViewSet):
+class RefereesViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Person.objects.filter(role='referee')
     serializer_class = PersonSerializer
 
 
-class CoachesViewSet(viewsets.ModelViewSet):
+class CoachesViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Person.objects.filter(role='coach')
     serializer_class = PersonSerializer
 
 
-class RefereesPerCompetitionViewSet(viewsets.ModelViewSet):
+class RefereesPerCompetitionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PersonSerializer
 
     def get_queryset(self):
@@ -69,7 +58,7 @@ class MatchesViewSet(viewsets.ModelViewSet):
     serializer_class = MatchSerializer
 
 
-class MatchesPerCompetitionViewSet(viewsets.ModelViewSet):
+class MatchesPerCompetitionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = MatchSerializer
 
     def get_queryset(self):

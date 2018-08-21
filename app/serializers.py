@@ -21,7 +21,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
             validators=[UniqueValidator(queryset=User.objects.all())]
             )
     password = serializers.CharField(required=True, min_length=8, write_only=True)
-    joined_date = serializers.DateTimeField(default=timezone.now)
+    date_joined = serializers.DateTimeField(default=timezone.now)
 
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'], validated_data['email'],
@@ -30,16 +30,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password', 'joined_date')
-
-
-class LoginUserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True)
-    password = serializers.CharField(required=True, write_only=True)
-
-    class Meta:
-        model = User
-        fields = ('email', 'password')
+        fields = ('id', 'username', 'email', 'password', 'date_joined')
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -64,8 +55,8 @@ class PlayerSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         person_data = validated_data.pop('person')
+        person_data['role'] = 'player'
         person = PersonSerializer.create(PersonSerializer(), validated_data=person_data)
-        # ToDo check if player
         player, created = Player.objects.update_or_create(position=validated_data.pop('position'),
                                                           person=person,
                                                           team=validated_data.pop('team'))
