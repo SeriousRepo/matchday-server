@@ -17,13 +17,13 @@ from app.serializers import MatchSerializer, PersonSerializer, CompetitionSerial
         self.first_referee = PersonSerializer(self.first_referee_model).data
         self.first_competition_model = Competition(pk=1, name='Name1', type='league')
         self.first_competition = CompetitionSerializer(self.first_competition_model).data
-        self.client.post(reverse('people-list'), self.first_referee, format='json')
-        self.client.post(reverse('competitions-list'), self.first_competition, format='json')
+        self.client.post(reverse('people-list'), self.first_referee)
+        self.client.post(reverse('competitions-list'), self.first_competition)
         self.context = {'request': APIRequestFactory().get('/')}
 
     def post_first_match(self):
         self.set_first_match()
-        self.client.post(self.url, self.first_match, format='json')
+        self.client.post(self.url, self.first_match)
 
     def set_first_match(self):
         self.first_model = Match(pk=1, date=datetime(2018, 11, 10, 20, 45),
@@ -38,8 +38,8 @@ from app.serializers import MatchSerializer, PersonSerializer, CompetitionSerial
     def post_both_matches(self):
         self.set_first_match()
         self.set_second_match()
-        self.client.post(self.url, self.first_match, format='json')
-        self.client.post(self.url, self.second_match, format='json')
+        self.client.post(self.url, self.first_match)
+        self.client.post(self.url, self.second_match)
 
 
 class CreateMatchTest(MatchTestSetUp):
@@ -49,11 +49,11 @@ class CreateMatchTest(MatchTestSetUp):
         self.set_second_match()
 
     def test_create_match(self):
-        response = self.client.post(self.url, self.first_match, format='json')
+        response = self.client.post(self.url, self.first_match)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Match.objects.count(), 1)
         self.assertEqual(response.data, self.first_match)
-        response = self.client.post(self.url, self.second_match, format='json')
+        response = self.client.post(self.url, self.second_match)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Match.objects.count(), 2)
         self.assertEqual(response.data, self.second_match)

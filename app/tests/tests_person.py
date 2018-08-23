@@ -1,14 +1,12 @@
 from rest_framework.reverse import reverse
 from rest_framework import status
-from rest_framework.authtoken.models import Token
-from rest_framework.test import APITestCase
-from django.contrib.auth.models import User
 from app.models import Person
 from app.serializers import PersonSerializer
 from datetime import date
+from .tests_setup_base import TestsSetUpBase
 
 
-class PersonTestSetUp(APITestCase):
+class PersonTestSetUp(TestsSetUpBase):
     first_model = Person(pk=1, last_name='LastName1', first_name='FirstName1',
                          role='coach', birth_date=date(1961, 5, 13), nationality='French')
     first_person = PersonSerializer(first_model).data
@@ -17,25 +15,14 @@ class PersonTestSetUp(APITestCase):
     second_person = PersonSerializer(second_model).data
     url = reverse('people-list')
 
-    def register_user(self):
-        url = reverse('account-create')
-        user = {
-            'username': 'username',
-            'email': 'email1@email.email',
-            'password': 'password',
-        }
-        self.client.post(url, user, format='json')
-        user = User.objects.get(username='username')
-        self.token = Token.objects.get(user=user)
-
     def post_first_person(self):
         self.register_user()
-        self.client.post(self.url, self.first_person, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.post(self.url, self.first_person, HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def post_both_persons(self):
         self.register_user()
-        self.client.post(self.url, self.first_person, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
-        self.client.post(self.url, self.second_person, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.post(self.url, self.first_person, HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.post(self.url, self.second_person, HTTP_AUTHORIZATION='Token ' + self.token.key)
 
 
 class CreatePersonTest(PersonTestSetUp):
@@ -43,11 +30,11 @@ class CreatePersonTest(PersonTestSetUp):
         self.register_user()
 
     def test_create_person(self):
-        response = self.client.post(self.url, self.first_person, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post(self.url, self.first_person, HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Person.objects.count(), 1)
         self.assertEqual(Person.objects.get(pk=1), self.first_model)
-        response = self.client.post(self.url, self.second_person, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post(self.url, self.second_person, HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Person.objects.count(), 2)
         self.assertEqual(Person.objects.get(pk=2), self.second_model)
@@ -56,7 +43,7 @@ class CreatePersonTest(PersonTestSetUp):
         first_model = Person(pk=1, last_name='LastName1', first_name='FirstName1',
                              role='WrongRole', birth_date=date(1961, 5, 13))
         first_person = PersonSerializer(first_model).data
-        response = self.client.post(self.url, first_person, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post(self.url, first_person, HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Person.objects.count(), 0)
 

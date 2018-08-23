@@ -21,11 +21,11 @@ class UserTestSetUp(APITestCase):
     register_url = reverse('account-create')
 
     def post_first_user(self):
-        self.client.post(self.register_url, self.first_user, format='json')
+        self.client.post(self.register_url, self.first_user)
         
     def post_both_users(self):
-        self.client.post(self.register_url, self.first_user, format='json')
-        self.client.post(self.register_url, self.second_user, format='json')
+        self.client.post(self.register_url, self.first_user)
+        self.client.post(self.register_url, self.second_user)
         
 
 class CreateUserTest(APITestCase):
@@ -48,12 +48,12 @@ class CreateUserTest(APITestCase):
         self.assertIsNotNone(current_user['token'])
 
     def test_create_user(self):
-        response = self.client.post(self.url, self.first_user, format='json')
+        response = self.client.post(self.url, self.first_user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 1)
         self.first_user['id'] = 1
         self.expect_correct_user(self.first_user, response.data)
-        response = self.client.post(self.url, self.second_user, format='json')
+        response = self.client.post(self.url, self.second_user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 2)
         self.second_user['id'] = 2
