@@ -55,6 +55,7 @@ class PlayerSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         person_data = validated_data.pop('person')
+        # Todo generate error code if non player type
         person_data['role'] = 'player'
         person = PersonSerializer.create(PersonSerializer(), validated_data=person_data)
         player, created = Player.objects.update_or_create(position=validated_data.pop('position'),
@@ -64,7 +65,6 @@ class PlayerSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class MatchSerializer(serializers.HyperlinkedModelSerializer):
-    # ToDo restrict that user can post only referee person
     main_referee = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='referee'), view_name='people-detail')
     competition = serializers.HyperlinkedRelatedField(queryset=Competition.objects.all(), view_name='competitions-detail')
 

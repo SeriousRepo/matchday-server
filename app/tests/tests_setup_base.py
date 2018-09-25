@@ -26,10 +26,10 @@ class TestsSetUpBase(APITestCase):
         return self.client.get(url, HTTP_AUTHORIZATION=self.get_key())
 
     def post_method(self, url, data):
-        return self.client.post(url, data, HTTP_AUTHORIZATION=self.get_key())
+        return self.client.post(url, data, HTTP_AUTHORIZATION=self.get_key(), format='json')
 
     def put_method(self, url, data):
-        return self.client.put(url, data, HTTP_AUTHORIZATION=self.get_key())
+        return self.client.put(url, data, HTTP_AUTHORIZATION=self.get_key(), format='json')
 
     def delete_method(self, url):
         return self.client.delete(url, HTTP_AUTHORIZATION=self.get_key())
