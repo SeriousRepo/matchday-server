@@ -1,8 +1,9 @@
 from rest_framework.reverse import reverse
 from rest_framework import status
 from app.models import Match
-from app.tests.tests_setup_base import TestsSetUpBase
-from app.tests.data_representations import PersonRepresentation, CompetitionRepresentation, MatchRepresentation
+from app.tests.helpers.tests_setup_base import TestsSetUpBase
+from app.tests.helpers.data_representations import PersonRepresentation, CompetitionRepresentation, MatchRepresentation
+from app.tests.helpers.common_data import coach_person
 
 
 class MatchTestSetUp(TestsSetUpBase):
@@ -14,18 +15,21 @@ class MatchTestSetUp(TestsSetUpBase):
     match2 = MatchRepresentation(2, referee.model, competition2.model)
     updated_match = MatchRepresentation(1, referee.model, competition2.model)
 
-    def post_nested(self, person=referee):
+    def post_nested_to_single(self, person=referee):
         self.register_user()
         self.post_method(reverse('people-list'), person.json)
         self.post_method(reverse('competitions-list'), self.competition1.json)
+
+    def post_nested_to_both(self):
+        self.post_nested_to_single()
         self.post_method(reverse('competitions-list'), self.competition2.json)
 
-    def post_single_match(self):
-        self.post_nested()
+    def post_single_match(self, person=referee):
+        self.post_nested_to_single(person)
         self.post_method(self.base_url, self.match1.json)
 
     def post_two_matches(self):
-        self.post_nested()
+        self.post_nested_to_both()
         self.post_method(self.base_url, self.match1.json)
         self.post_method(self.base_url, self.match2.json)
 
@@ -35,7 +39,7 @@ class MatchTestSetUp(TestsSetUpBase):
 
 class CreateMatchTest(MatchTestSetUp):
     def setUp(self):
-        self.post_nested()
+        self.post_nested_to_both()
 
     def test_create_match(self):
         response = self.post_method(self.base_url, self.match1.json)
@@ -50,10 +54,8 @@ class CreateMatchTest(MatchTestSetUp):
 
 class WrongCreationOfMatchTest(MatchTestSetUp):
     def setUp(self):
-        self.coach = PersonRepresentation(1, 'coach')
-        self.register_user()
-        self.post_method(reverse('people-list'), self.coach.json)
-        self.post_method(reverse('competitions-list'), self.competition1.json)
+        self.coach = coach_person(1)
+        self.post_nested_to_single(self.coach)
 
     def test_not_create_match_when_non_referee_person_type(self):
         non_referee_match = MatchRepresentation(1, self.coach.model, self.competition1.model)
@@ -82,7 +84,8 @@ class ReadMatchTest(MatchTestSetUp):
 
 class UpdateMatchTest(MatchTestSetUp):
     def setUp(self):
-        self.post_single_match()
+        self.post_nested_to_both()
+        self.post_method(self.base_url, self.match1.json)
 
     def test_update_match(self):
         response = self.put_method(self.get_nth_element_url(self.match1.model.pk), self.updated_match.json)

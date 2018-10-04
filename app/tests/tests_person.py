@@ -1,15 +1,15 @@
 from rest_framework.reverse import reverse
 from rest_framework import status
 from app.models import Person
-from app.tests.tests_setup_base import TestsSetUpBase
-from app.tests.data_representations import PersonRepresentation
+from app.tests.helpers.tests_setup_base import TestsSetUpBase
+from app.tests.helpers.common_data import player_person, coach_person, referee_person, wrong_type_person
 
 
 class PersonTestSetUp(TestsSetUpBase):
     base_url = reverse('people-list')
-    person1 = PersonRepresentation(1, 'coach')
-    person2 = PersonRepresentation(2, 'player')
-    updated_person = PersonRepresentation(1, 'player')
+    person1 = coach_person(1)
+    person2 = player_person(2)
+    updated_person = referee_person(1)
 
     def get_nth_element_url(self, n):
         return self.get_specific_url(self.base_url, n)
@@ -39,7 +39,7 @@ class CreatePersonTest(PersonTestSetUp):
         self.assertEqual(Person.objects.get(pk=2), self.person2.model)
 
     def test_not_create_person_with_wrong_role(self):
-        wrong_role_person = PersonRepresentation(1, 'wrong_role')
+        wrong_role_person = wrong_type_person(1)
         response = self.post_method(self.base_url, wrong_role_person.json)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Person.objects.count(), 0)

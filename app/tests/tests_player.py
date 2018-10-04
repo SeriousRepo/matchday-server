@@ -1,21 +1,19 @@
 from rest_framework.reverse import reverse
 from rest_framework import status
 from app.models import Player
-from app.tests.tests_setup_base import TestsSetUpBase
-from app.tests.data_representations import TeamRepresentation, PersonRepresentation, PlayerRepresentation
+from app.tests.helpers.tests_setup_base import TestsSetUpBase
+from app.tests.helpers.common_data import player, team
 
 
 class PlayerTestSetUp(TestsSetUpBase):
     base_url = reverse('players-list')
-    team = TeamRepresentation(1)
-    person1 = PersonRepresentation(1, 'player')
-    person2 = PersonRepresentation(2, 'player')
-    player1 = PlayerRepresentation(1, 'CB', team.model, person1.model)
-    player2 = PlayerRepresentation(2, 'GK', team.model, person2.model)
+    player1 = player(1)
+    player2 = player(2)
 
     def post_nested(self):
         self.register_user()
-        self.post_method(reverse('teams-list'), self.team.json)
+        self.post_method(reverse('teams-list'), team(1).json)
+        self.post_method(reverse('teams-list'), team(2).json)
 
     def post_single_player(self):
         self.post_nested()

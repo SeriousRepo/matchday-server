@@ -1,15 +1,15 @@
 from rest_framework.reverse import reverse
 from rest_framework import status
 from app.models import Team
-from app.tests.tests_setup_base import TestsSetUpBase
-from app.tests.data_representations import TeamRepresentation
+from app.tests.helpers.tests_setup_base import TestsSetUpBase
+from app.tests.helpers.common_data import team
 
 
 class TeamTestSetUp(TestsSetUpBase):
     base_url = reverse('teams-list')
-    team1 = TeamRepresentation(1)
-    team2 = TeamRepresentation(2)
-    updated_team = TeamRepresentation(1, 'updated_city')
+    team1 = team(1)
+    team2 = team(2)
+    updated_team = team(1, 'updated_city')
     
     def post_single_team(self):
         self.register_user()

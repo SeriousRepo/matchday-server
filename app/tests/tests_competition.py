@@ -1,17 +1,17 @@
 from rest_framework.reverse import reverse
 from rest_framework import status
 from app.models import Competition
-from app.tests.tests_setup_base import TestsSetUpBase
-from app.tests.data_representations import CompetitionRepresentation
+from app.tests.helpers.tests_setup_base import TestsSetUpBase
+from app.tests.helpers.common_data import tournament_competition, league_competition, wrong_type_competition
 
 
 # ToDo add tests for /competition/<id>/matches/ endpoint
 
 class CompetitionTestSetUp(TestsSetUpBase):
     base_url = reverse('competitions-list')
-    competition1 = CompetitionRepresentation(1, 'league')
-    competition2 = CompetitionRepresentation(2, 'tournament')
-    updated_competition = CompetitionRepresentation(1, 'tournament')
+    competition1 = league_competition(1)
+    competition2 = tournament_competition(2)
+    updated_competition = tournament_competition(1)
 
     def get_nth_element_url(self, n):
         return self.get_specific_url(self.base_url, n)
@@ -41,8 +41,8 @@ class CreateCompetitionTest(CompetitionTestSetUp):
         self.assertEqual(Competition.objects.get(pk=2), self.competition2.model)
 
     def test_not_create_competition_with_wrong_type(self):
-        wrong_type_competition = CompetitionRepresentation(1, 'wrong_type')
-        response = self.post_method(self.base_url, wrong_type_competition.json)
+        wrong_competition = wrong_type_competition(1)
+        response = self.post_method(self.base_url, wrong_competition.json)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Competition.objects.count(), 0)
 

@@ -1,6 +1,6 @@
 from app.serializers import *
 from rest_framework.test import APIRequestFactory
-from datetime import datetime, date
+from datetime import datetime, date, time
 
 
 context = {'request': APIRequestFactory().get('/')}
@@ -27,8 +27,8 @@ class PersonRepresentation:
 
 
 class PlayerRepresentation:
-    def __init__(self, pk, position, team, person):
-        self.model = Player(pk=pk, position=position, team=team, person=person)
+    def __init__(self, pk, team, person):
+        self.model = Player(pk=pk, position='GK', team=team, person=person)
         self.json = PlayerSerializer(self.model, context=context).data
 
 
@@ -39,6 +39,19 @@ class TeamRepresentation:
 
 
 class MatchTeamRepresentation:
-    def __init__(self, pk, is_host, team, match, coach):
-        self.model = MatchTeam(pk=pk, is_host=is_host, team=team, match=match, coach=coach)
+    def __init__(self, pk, team, match, coach):
+        self.model = MatchTeam(pk=pk, is_host=True, team=team, match=match, coach=coach)
         self.json = MatchTeamSerializer(self.model, context=context).data
+
+
+class EventInfoRepresentation:
+    def __init__(self, pk, user):
+        self.model = EventInfo(pk=pk, real_time=time(18, 43), match_minute=13, rank_points=137, user=user)
+        self.json = EventInfoSerializer(self.model, context=context).data
+
+
+class MatchEventRepresentation:
+    def __init__(self, pk, match, event_info):
+        self.model = MatchEvent(pk=pk, description='description'+str(pk),
+                                event_type='first whistle', match=match, event_info=event_info)
+        self.json = MatchEventSerializer(self.model, context=context).data

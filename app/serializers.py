@@ -110,6 +110,7 @@ class MatchEventSerializer(serializers.ModelSerializer):
         event_data = validated_data.pop('event_info')
         event = EventInfoSerializer.create(EventInfoSerializer(), validated_data=event_data)
         match_event, created = MatchEvent.objects.update_or_create(description=validated_data.pop('description'),
+                                                                   event_type=validated_data.pop('event_type'),
                                                                    match=validated_data.pop('match'),
                                                                    event_info=event)
         return match_event
