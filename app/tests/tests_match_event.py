@@ -11,7 +11,7 @@ class MatchEventTestSetUp(TestsSetUpBase):
     referee = referee_person(1)
     competition = league_competition(1)
     match1 = match(1)
-    #match2 = match(2)
+    match2 = match(2)
 
     def create_events(self):
         self.register_user(2)
@@ -19,6 +19,7 @@ class MatchEventTestSetUp(TestsSetUpBase):
         self.event_info2 = event_info(2, self.get_user_model(2))
         self.match_event1 = MatchEventRepresentation(1, self.match1.model, self.event_info1.model)
         self.match_event2 = MatchEventRepresentation(2, self.match1.model, self.event_info2.model)
+        self.updated_match_event = MatchEventRepresentation(1, self.match2.model, self.event_info1.model)
 
     def post_nested_to_single(self):
         self.register_user()
@@ -59,17 +60,9 @@ class CreateMatchTest(MatchEventTestSetUp):
         self.assertEqual(response.data, self.match_event2.json)
 
 
-"""class WrongCreationOfMatchEventTest(MatchEventTestSetUp):
-    def setUp(self):
-        self.post_nested_to_single(self.referee)
-
-    def test_not_create_match_team_when_non_coach_person_type(self):
-        non_coach_match_team = MatchEventRepresentation(1, self.team.model, self.match1.model, self.referee.model)
-        response = self.post_method(self.base_url, non_coach_match_team.json)
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-
-    #TODO
-    #def test_not_create_two_match_team_with_same_matches_and_teams(self):
+#class WrongCreationOfMatchEventTest(MatchEventTestSetUp):
+    # Todo restrict adding same event several times
+    # def test_restrict_creating_same_player_several_times(self):
 
 
 class ReadMatchTest(MatchEventTestSetUp):
@@ -79,40 +72,42 @@ class ReadMatchTest(MatchEventTestSetUp):
     def test_read_match_list(self):
         response = self.get_method(self.base_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0], self.match_team1.json)
-        self.assertEqual(response.data[1], self.match_team2.json)
+        self.assertEqual(response.data[0], self.match_event1.json)
+        self.assertEqual(response.data[1], self.match_event2.json)
 
     def test_read_single_match(self):
-        response = self.get_method(self.get_nth_element_url(self.match_team1.model.pk))
+        response = self.get_method(self.get_nth_element_url(self.match_event1.model.pk))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, self.match_team1.json)
-        response = self.get_method(self.get_nth_element_url(self.match_team2.model.pk))
+        self.assertEqual(response.data, self.match_event1.json)
+        response = self.get_method(self.get_nth_element_url(self.match_event2.model.pk))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, self.match_team2.json)
+        self.assertEqual(response.data, self.match_event2.json)
 
 
-class UpdateMatchTest(MatchEventTestSetUp):
+#ToDo fix nested
+"""class UpdateMatchTest(MatchEventTestSetUp):
     def setUp(self):
         self.post_nested_to_both()
-        self.post_method(self.base_url, self.match_team1.json)
+        self.post_method(self.base_url, self.match_event1.json)
+        self.post_method(reverse('matches-list'), self.match2.json)
 
     def test_update_match(self):
-        response = self.put_method(self.get_nth_element_url(self.match1.model.pk), self.updated_match_team.json)
+        response = self.put_method(self.get_nth_element_url(self.match_event1.model.pk), self.updated_match_event.json)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, self.updated_match_team.json)
+        self.assertEqual(response.data, self.updated_match_event.json)
         response = self.get_method(self.get_nth_element_url(self.match1.model.pk))
-        self.assertEqual(response.data, self.updated_match_team.json)
-
+        self.assertEqual(response.data, self.updated_match_event.json)
+"""
 
 class DeleteMatchTest(MatchEventTestSetUp):
     def setUp(self):
         self.post_two_matches()
 
     def test_delete_match(self):
-        response = self.delete_method(self.get_nth_element_url(self.match_team1.model.pk))
+        response = self.delete_method(self.get_nth_element_url(self.match_event1.model.pk))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(MatchEvent.objects.count(), 1)
-        response = self.delete_method(self.get_nth_element_url(self.match_team2.model.pk))
+        response = self.delete_method(self.get_nth_element_url(self.match_event2.model.pk))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(MatchEvent.objects.count(), 0)
 
@@ -124,14 +119,13 @@ class PermissionsTest(MatchEventTestSetUp):
     def test_allow_safe_http_methods_without_authorization(self):
         response = self.get_method(self.base_url)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        response = self.get_method(self.get_nth_element_url(self.match_team1.model.pk))
+        response = self.get_method(self.get_nth_element_url(self.match_event1.model.pk))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_restrict_non_safe_http_methods_without_authorization(self):
-        response = self.client.post(self.base_url, self.match_team1.json)
+        response = self.client.post(self.base_url, self.match_event1.json, format='json')
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
-        response = self.client.put(self.get_nth_element_url(self.match_team1.model.pk), self.updated_match_team.json)
+        response = self.client.put(self.get_nth_element_url(self.match_event1.model.pk), self.updated_match_event.json, format='json')
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
-        response = self.client.delete(self.get_nth_element_url(self.match_team1.model.pk))
+        response = self.client.delete(self.get_nth_element_url(self.match_event1.model.pk), format='json')
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
-"""

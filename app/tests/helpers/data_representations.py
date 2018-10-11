@@ -55,3 +55,15 @@ class MatchEventRepresentation:
         self.model = MatchEvent(pk=pk, description='description'+str(pk),
                                 event_type='first whistle', match=match, event_info=event_info)
         self.json = MatchEventSerializer(self.model, context=context).data
+
+
+class TeamEventRepresentation:
+    def __init__(self, pk, player, match_team, event_info):
+        self.model = TeamEvent(pk=pk, player=player, match_team=match_team, event_info=event_info)
+        self.json = TeamEventSerializer(self.model, context=context).data
+
+
+class GoalRepresentation:
+    def __init__(self, pk,  team_event, description='description'):
+        self.model = Goal(pk=pk, description=description, team_event=team_event)
+        self.json = GoalSerializer(self.model, context=context).data

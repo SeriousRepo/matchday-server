@@ -41,13 +41,6 @@ class CreatePlayerTest(PlayerTestSetUp):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Player.objects.count(), 2)
         self.assertEqual(response.data, self.player2.json)
-
-    # Todo restrict adding same player several times and uncomment
-    #def test_restrict_creating_same_player_several_times(self):
-    #    self.post_method(self.base_url, self.player1.json)
-    #    response = self.post_method(self.base_url, self.player1.json)
-    #    self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    
     
 # Todo watch player serializer and uncomment
 #class WrongCreationOfPlayerTest(PlayerTestSetUp):
@@ -59,6 +52,11 @@ class CreatePlayerTest(PlayerTestSetUp):
 #        non_player_type_person = PlayerRepresentation(1, 'CB', self.team.model, referee.model)
 #        response = self.post_method(self.base_url, non_player_type_person.json)
 #        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+    # Todo restrict adding same player several times and uncomment
+    #def test_restrict_creating_same_player_several_times(self):
+    #    self.post_method(self.base_url, self.player1.json)
+    #    response = self.post_method(self.base_url, self.player1.json)
+    #    self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class ReadPlayerTest(PlayerTestSetUp):
