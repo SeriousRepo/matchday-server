@@ -1,5 +1,5 @@
 import os
-import django_heroku
+#import django_heroku
 from django.core.exceptions import ImproperlyConfigured
 
 try:
