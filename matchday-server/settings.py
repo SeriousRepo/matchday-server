@@ -86,13 +86,13 @@ TEMPLATES = [
     },
 ]
 
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_EMAIL_REQUIRED = True
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = LOGIN_EMAIL
-EMAIL_HOST_PASSWORD = PASSWORD_EMAIL
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+#ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+#ACCOUNT_EMAIL_REQUIRED = True
+#EMAIL_HOST = 'smtp.sendgrid.net'
+#EMAIL_HOST_USER = LOGIN_EMAIL
+#EMAIL_HOST_PASSWORD = PASSWORD_EMAIL
+#EMAIL_PORT = 587
+#EMAIL_USE_TLS = True
 
 WSGI_APPLICATION = 'matchday-server.wsgi.application'
 
@@ -146,4 +146,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Activate Django-Heroku.
-django_heroku.settings(locals())
+#django_heroku.settings(locals())
