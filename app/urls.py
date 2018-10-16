@@ -20,13 +20,8 @@ router.register(r'competitions/(?P<competition_id>\d+)/matches',
 router.register(r'competitions/(?P<competition_id>\d+)/referees',
                 views.RefereesPerCompetitionViewSet, base_name='referees_in_competition')
 router.register(r'teams', views.TeamsViewSet, base_name='teams')
-router.register(r'match_team', views.MatchTeamsViewSet, base_name='match_teams')
+router.register(r'team_in_match', views.TeamInMatchsViewSet, base_name='team_in_matchs')
 router.register(r'match_events', views.MatchEventsViewSet, base_name='match_events')
 router.register(r'team_events', views.TeamEventsViewSet, base_name='team_events')
-router.register(r'goals', views.GoalsViewSet, base_name='goals')
-router.register(r'red_cards', views.RedCardsViewSet, base_name='red_cards')
-router.register(r'yellow_cards', views.YellowCardsViewSet, base_name='yellow_cards')
-router.register(r'substitutions', views.SubstitutionsViewSet, base_name='substitutions')
-router.register(r'assists', views.AssistsViewSet, base_name='assists')
 
 urlpatterns += router.urls

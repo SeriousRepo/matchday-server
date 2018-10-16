@@ -76,9 +76,9 @@ class TeamsViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
 
 
-class MatchTeamsViewSet(viewsets.ModelViewSet):
-    queryset = MatchTeam.objects.all()
-    serializer_class = MatchTeamSerializer
+class TeamInMatchsViewSet(viewsets.ModelViewSet):
+    queryset = TeamInMatch.objects.all()
+    serializer_class = TeamInMatchSerializer
 
 
 class EventInfosViewSet(viewsets.ModelViewSet):
@@ -94,28 +94,3 @@ class MatchEventsViewSet(viewsets.ModelViewSet):
 class TeamEventsViewSet(viewsets.ModelViewSet):
     queryset = TeamEvent.objects.all()
     serializer_class = TeamEventSerializer
-
-
-class GoalsViewSet(viewsets.ModelViewSet):
-    queryset = Goal.objects.all()
-    serializer_class = GoalSerializer
-
-
-class RedCardsViewSet(viewsets.ModelViewSet):
-    queryset = RedCard.objects.all()
-    serializer_class = RedCardSerializer
-
-
-class YellowCardsViewSet(viewsets.ModelViewSet):
-    queryset = YellowCard.objects.all()
-    serializer_class = YellowCardSerializer
-
-
-class SubstitutionsViewSet(viewsets.ModelViewSet):
-    queryset = Substitution.objects.all()
-    serializer_class = SubstitutionSerializer
-
-
-class AssistsViewSet(viewsets.ModelViewSet):
-    queryset = Assist.objects.all()
-    serializer_class = AssistSerializer

@@ -34,7 +34,7 @@ def team(pk, city='city'):
 
 
 def player(pk):
-    return PlayerRepresentation(pk, team(pk).model, player_person(pk).model)
+    return PlayerRepresentation(pk, team(1).model, player_person(pk).model)
 
 
 def match(pk, referee=referee_person(1)):
@@ -45,9 +45,5 @@ def event_info(pk, user):
     return EventInfoRepresentation(pk, user)
 
 
-def match_team(pk, coach=coach_person(1), matchx=match(1)):
-    return MatchTeamRepresentation(pk, team(1).model, matchx.model, coach.model)
-
-
-def team_event(pk, user):
-    return TeamEventRepresentation(pk=pk, player=player(1).model, match_team=match_team(1, coach_person(2)).model, event_info=event_info(pk, user).model)
+def team_in_match(pk, coach=coach_person(1), matchx=match(1)):
+    return TeamInMatchRepresentation(pk, team(1).model, matchx.model, coach.model)

@@ -38,32 +38,27 @@ class TeamRepresentation:
         self.json = TeamSerializer(self.model).data
 
 
-class MatchTeamRepresentation:
+class TeamInMatchRepresentation:
     def __init__(self, pk, team, match, coach):
-        self.model = MatchTeam(pk=pk, is_host=True, team=team, match=match, coach=coach)
-        self.json = MatchTeamSerializer(self.model, context=context).data
+        self.model = TeamInMatch(pk=pk, is_host=True, team=team, match=match, coach=coach)
+        self.json = TeamInMatchSerializer(self.model, context=context).data
 
 
 class EventInfoRepresentation:
     def __init__(self, pk, user):
-        self.model = EventInfo(pk=pk, real_time=time(18, 43), match_minute=13, rank_points=137, user=user)
+        self.model = EventInfo(pk=pk, real_time=time(18, 43), description='description'+str(pk),
+                               match_minute=13, rank_points=137, user=user)
         self.json = EventInfoSerializer(self.model, context=context).data
 
 
 class MatchEventRepresentation:
     def __init__(self, pk, match, event_info):
-        self.model = MatchEvent(pk=pk, description='description'+str(pk),
-                                event_type='first whistle', match=match, event_info=event_info)
+        self.model = MatchEvent(pk=pk, event_type='first whistle', match=match, event_info=event_info)
         self.json = MatchEventSerializer(self.model, context=context).data
 
 
 class TeamEventRepresentation:
-    def __init__(self, pk, player, match_team, event_info):
-        self.model = TeamEvent(pk=pk, player=player, match_team=match_team, event_info=event_info)
+    def __init__(self, pk, player, participant, team_in_match, event_info, event_type='goal'):
+        self.model = TeamEvent(pk=pk, event_type=event_type, player=player, event_participant=participant,
+                               team_in_match=team_in_match, event_info=event_info)
         self.json = TeamEventSerializer(self.model, context=context).data
-
-
-class GoalRepresentation:
-    def __init__(self, pk,  team_event, description='description'):
-        self.model = Goal(pk=pk, description=description, team_event=team_event)
-        self.json = GoalSerializer(self.model, context=context).data

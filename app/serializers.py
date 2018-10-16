@@ -46,22 +46,12 @@ class TeamSerializer(serializers.ModelSerializer):
 
 
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
-    person = PersonSerializer(required=True)
+    person = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='player'), view_name='people-detail')
     team = serializers.HyperlinkedRelatedField(queryset=Team.objects.all(), view_name='teams-detail')
 
     class Meta:
         model = Player
         fields = ('id', 'position', 'team', 'person')
-
-    def create(self, validated_data):
-        person_data = validated_data.pop('person')
-        # Todo generate error code if non player type
-        person_data['role'] = 'player'
-        person = PersonSerializer.create(PersonSerializer(), validated_data=person_data)
-        player, created = Player.objects.update_or_create(position=validated_data.pop('position'),
-                                                          person=person,
-                                                          team=validated_data.pop('team'))
-        return player
 
 
 class MatchSerializer(serializers.HyperlinkedModelSerializer):
@@ -79,14 +69,14 @@ class CompetitionSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'type')
 
 
-class MatchTeamSerializer(serializers.HyperlinkedModelSerializer):
+class TeamInMatchSerializer(serializers.HyperlinkedModelSerializer):
     # ToDo add restriction to different teams in single match
     team = serializers.HyperlinkedRelatedField(queryset=Team.objects.all(), view_name='teams-detail')
     match = serializers.HyperlinkedRelatedField(queryset=Match.objects.all(), view_name='matches-detail')
     coach = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='coach'), view_name='people-detail')
 
     class Meta:
-        model = MatchTeam
+        model = TeamInMatch
         fields = ('id', 'is_host', 'team', 'match', 'coach')
 
 
@@ -95,7 +85,7 @@ class EventInfoSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = EventInfo
-        fields = ('id', 'real_time', 'match_minute', 'rank_points', 'user')
+        fields = ('id', 'real_time', 'match_minute', 'description', 'rank_points', 'user')
 
 
 class MatchEventSerializer(serializers.ModelSerializer):
@@ -104,13 +94,12 @@ class MatchEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MatchEvent
-        fields = ('id', 'description', 'event_type', 'match', 'event_info')
+        fields = ('id', 'event_type', 'match', 'event_info')
 
     def create(self, validated_data):
         event_data = validated_data.pop('event_info')
         event = EventInfoSerializer.create(EventInfoSerializer(), validated_data=event_data)
-        match_event, created = MatchEvent.objects.update_or_create(description=validated_data.pop('description'),
-                                                                   event_type=validated_data.pop('event_type'),
+        match_event, created = MatchEvent.objects.update_or_create(event_type=validated_data.pop('event_type'),
                                                                    match=validated_data.pop('match'),
                                                                    event_info=event)
         return match_event
@@ -118,99 +107,31 @@ class MatchEventSerializer(serializers.ModelSerializer):
 
 class TeamEventSerializer(serializers.HyperlinkedModelSerializer):
     player = serializers.HyperlinkedRelatedField(queryset=Player.objects.all(), view_name='players-detail')
-    match_team = serializers.HyperlinkedRelatedField(queryset=MatchTeam.objects.all(), view_name='match_teams-detail')
+    event_participant = serializers.HyperlinkedRelatedField(queryset=Player.objects.all(), view_name='players-detail')
+    team_in_match = serializers.HyperlinkedRelatedField(queryset=TeamInMatch.objects.all(), view_name='team_in_matchs-detail')
     event_info = EventInfoSerializer(required=True)
 
     class Meta:
         model = TeamEvent
-        fields = ('id', 'player', 'match_team', 'event_info')
+        fields = ('id', 'event_type', 'player', 'event_participant', 'team_in_match', 'event_info')
 
     def create(self, validated_data):
         event_data = validated_data.pop('event_info')
         event = EventInfoSerializer.create(EventInfoSerializer(), validated_data=event_data)
-        # ToDo check if player
-        team_event, created = TeamEvent.objects.update_or_create(player=validated_data.pop('player'),
-                                                                 match_team=validated_data.pop('match_team'),
+        team_event, created = TeamEvent.objects.update_or_create(event_type=validated_data.pop('event_type'),
+                                                                 player=validated_data.pop('player'),
+                                                                 event_participant=validated_data.pop('event_participant'),
+                                                                 team_in_match=validated_data.pop('team_in_match'),
                                                                  event_info=event)
         return team_event
 
-
-class GoalSerializer(serializers.ModelSerializer):
-    team_event = TeamEventSerializer(required=True)
-
-    class Meta:
-        model = Goal
-        fields = ('id', 'description', 'team_event')
-
-    def create(self, validated_data):
-        event_data = validated_data.pop('team_event')
-        event = TeamEventSerializer.create(TeamEventSerializer(), validated_data=event_data)
-        goal, created = Goal.objects.all().update_or_create(description=validated_data.pop('description'),
-                                                            team_event=event)
-        return goal
-
-
-class RedCardSerializer(serializers.ModelSerializer):
-    team_event = TeamEventSerializer(required=True)
-
-    class Meta:
-        model = RedCard
-        fields = ('id', 'reason', 'team_event')
-
-    def create(self, validated_data):
-        event_data = validated_data.pop('team_event')
-        event = TeamEventSerializer.create(TeamEventSerializer(), validated_data=event_data)
-        red_card, created = RedCard.objects.all().update_or_create(reason=validated_data.pop('reason'),
-                                                                   team_event=event)
-        return red_card
-
-
-class YellowCardSerializer(serializers.ModelSerializer):
-    team_event = TeamEventSerializer(required=True)
-
-    class Meta:
-        model = YellowCard
-        fields = ('id', 'reason', 'team_event')
-
-    def create(self, validated_data):
-        event_data = validated_data.pop('team_event')
-        event = TeamEventSerializer.create(TeamEventSerializer(), validated_data=event_data)
-        yellow_card, created = YellowCard.objects.all().update_or_create(reason=validated_data.pop('reason'),
-                                                                         team_event=event)
-        return yellow_card
-
-
-class SubstitutionSerializer(serializers.HyperlinkedModelSerializer):
-    team_event = TeamEventSerializer(required=True)
-    # ToDo check if not the same player
-    substituted_by = serializers.HyperlinkedRelatedField(queryset=Player.objects.all(), view_name='players-detail')
-
-    class Meta:
-        model = Substitution
-        fields = ('id', 'reason', 'substituted_by', 'team_event')
-
-    def create(self, validated_data):
-        event_data = validated_data.pop('team_event')
-        event = TeamEventSerializer.create(TeamEventSerializer(), validated_data=event_data)
-        substitution, created = Substitution.objects.all().update_or_create(reason=validated_data.pop('reason'),
-                                                                            substituted_by=validated_data.pop('substituted_by'),
-                                                                            team_event=event)
-        return substitution
-
-
-class AssistSerializer(serializers.HyperlinkedModelSerializer):
-    team_event = TeamEventSerializer(required=True)
-    # ToDo check if not the same player
-    assisted_to = serializers.HyperlinkedRelatedField(queryset=Player.objects.all(), view_name='players-detail')
-
-    class Meta:
-        model = Assist
-        fields = ('id', 'description', 'assisted_to', 'team_event')
-
-    def create(self, validated_data):
-        event_data = validated_data.pop('team_event')
-        event = TeamEventSerializer.create(TeamEventSerializer(), validated_data=event_data)
-        assist, created = Assist.objects.all().update_or_create(description=validated_data.pop('description'),
-                                                                assisted_to=validated_data.pop('assisted_to'),
-                                                                team_event=event)
-        return assist
+    def update(self, instance, validated_data):
+        validated_event_info = validated_data.get('event_info', instance.event_info)
+        event_info = EventInfoSerializer.update(EventInfoSerializer(), instance.event_info, validated_data=validated_event_info)
+        instance.event_type = validated_data.get('event_type', instance.event_type)
+        instance.player = validated_data.get('player', instance.player)
+        instance.event_participant = validated_data.get('event_participant', instance.event_participant)
+        instance.team_in_match = validated_data.get('team_in_match', instance.team_in_match)
+        instance.event_info = event_info
+        instance.save()
+        return instance

@@ -3,32 +3,36 @@ from rest_framework import status
 from app.models import TeamEvent
 from app.tests.helpers.tests_setup_base import TestsSetUpBase
 from app.tests.helpers.data_representations import TeamEventRepresentation
-from app.tests.helpers.common_data import match_team, event_info, player, team, match, coach_person, referee_person, league_competition
+from app.tests.helpers.common_data import team_in_match, event_info, player, team, match, coach_person, referee_person, league_competition, player_person
 
 
 class TeamEventTestSetUp(TestsSetUpBase):
     base_url = reverse('team_events-list')
     player1 = player(1)
-    match_team = match_team(1, coach_person(2), match(1, referee_person(3)))
+    player2 = player(2)
+    team_in_match = team_in_match(1, coach_person(3), match(1, referee_person(4)))
 
     def create_events(self):
         self.register_user(2)
         self.event_info1 = event_info(1, self.get_user_model(2))
         self.event_info2 = event_info(2, self.get_user_model(2))
-        self.team_event1 = TeamEventRepresentation(1, self.player1.model, self.match_team.model, self.event_info1.model)
-        self.team_event2 = TeamEventRepresentation(2, self.player1.model, self.match_team.model, self.event_info2.model)
-        self.updated_team_event = TeamEventRepresentation(1, self.player1.model, self.match_team.model, self.event_info2.model)
+        self.team_event1 = TeamEventRepresentation(1, self.player1.model, self.player2.model, self.team_in_match.model, self.event_info1.model)
+        self.team_event2 = TeamEventRepresentation(2, self.player2.model, self.player1.model, self.team_in_match.model, self.event_info2.model)
+        self.updated_team_event = TeamEventRepresentation(1, self.player2.model, self.player1.model, self.team_in_match.model, self.event_info1.model)
 
     def post_nested_to_single(self):
         self.register_user()
         self.create_events()
         self.post_method(reverse('teams-list'), team(1).json)
+        self.post_method(reverse('people-list'), player_person(1).json)
+        self.post_method(reverse('people-list'), player_person(2).json)
         self.post_method(reverse('players-list'), self.player1.json)
-        self.post_method(reverse('people-list'), coach_person(2).json)
-        self.post_method(reverse('people-list'), referee_person(3).json)
+        self.post_method(reverse('players-list'), self.player2.json)
+        self.post_method(reverse('people-list'), coach_person(3).json)
+        self.post_method(reverse('people-list'), referee_person(4).json)
         self.post_method(reverse('competitions-list'), league_competition(1).json)
-        self.post_method(reverse('matches-list'), match(1, referee_person(3)).json)
-        self.post_method(reverse('match_teams-list'), self.match_team.json)
+        self.post_method(reverse('matches-list'), match(1, referee_person(4)).json)
+        self.post_method(reverse('team_in_matchs-list'), self.team_in_match.json)
 
     def post_nested_to_both(self):
         self.post_nested_to_single()
@@ -61,11 +65,6 @@ class CreateMatchTest(TeamEventTestSetUp):
         self.assertEqual(response.data, self.team_event2.json)
 
 
-# class WrongCreationOfTeamEventTest(TeamEventTestSetUp):
-# Todo restrict adding same event several times
-# def test_restrict_creating_same_player_several_times(self):
-
-
 class ReadMatchTest(TeamEventTestSetUp):
     def setUp(self):
         self.post_two_matches()
@@ -85,8 +84,6 @@ class ReadMatchTest(TeamEventTestSetUp):
         self.assertEqual(response.data, self.team_event2.json)
 
 
-"""
-# ToDo fix nested
 class UpdateMatchTest(TeamEventTestSetUp):
     def setUp(self):
         self.post_nested_to_both()
@@ -99,7 +96,7 @@ class UpdateMatchTest(TeamEventTestSetUp):
         self.assertEqual(response.data, self.updated_team_event.json)
         response = self.get_method(self.get_nth_element_url(self.team_event1.model.pk))
         self.assertEqual(response.data, self.updated_team_event.json)
-"""
+
 
 class DeleteMatchTest(TeamEventTestSetUp):
     def setUp(self):
