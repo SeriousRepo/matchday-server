@@ -1,5 +1,5 @@
 import os
-#import django_heroku
+import django_heroku
 from django.core.exceptions import ImproperlyConfigured
 
 try:
@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '*2akpcd4dl=y$m#!!ny*l41e2-ed97q6$80vclc9n@ir_)f)cx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 APPEND_SLASH = False
 
@@ -28,12 +28,12 @@ ALLOWED_HOSTS = []
 
 
 REST_FRAMEWORK = {
-    #'DEFAULT_RENDERER_CLASSES': (
-    #    'rest_framework.renderers.JSONRenderer',
-    #),
-    #'DEFAULT_PARSER_CLASSES': (
-    #    'rest_framework.parsers.JSONParser',
-    #),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    #'django.contrib.staticfiles',
     'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
@@ -143,7 +143,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 
 # Activate Django-Heroku.
-#django_heroku.settings(locals())
+django_heroku.settings(locals())
