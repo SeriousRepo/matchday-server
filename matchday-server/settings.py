@@ -1,13 +1,13 @@
 import os
 import django_heroku
-from django.core.exceptions import ImproperlyConfigured
+#from django.core.exceptions import ImproperlyConfigured
 
-try:
-    LOGIN_EMAIL = os.environ.get('EMAIL_USER')
-    PASSWORD_EMAIL = os.environ.get('EMAIL_PASSWORD')
-except KeyError:
-    error_msg = "cannot find environment variable"
-    raise ImproperlyConfigured(error_msg)
+#try:
+#    LOGIN_EMAIL = os.environ.get('EMAIL_USER')
+#    PASSWORD_EMAIL = os.environ.get('EMAIL_PASSWORD')
+#except KeyError:
+#    error_msg = "cannot find environment variable"
+#    raise ImproperlyConfigured(error_msg)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+#    'django.contrib.staticfiles',
     'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
