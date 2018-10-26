@@ -101,8 +101,12 @@ WSGI_APPLICATION = 'matchday-server.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'matchday_server',
+        'USER': 'matchday_server_user',
+        'PASSWORD': 'matchday_server_password',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
