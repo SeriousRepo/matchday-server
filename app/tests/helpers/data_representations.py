@@ -7,8 +7,8 @@ context = {'request': APIRequestFactory().get('/')}
 
 
 class CompetitionRepresentation:
-    def __init__(self, pk, type):
-        self.model = Competition(pk=pk, name='name' + str(pk), type=type)
+    def __init__(self, pk, type, year):
+        self.model = Competition(pk=pk, name='name' + str(pk), type=type, year=year)
         self.json = CompetitionSerializer(self.model).data
 
 

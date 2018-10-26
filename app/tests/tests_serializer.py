@@ -10,8 +10,6 @@ from rest_framework.test import APITestCase, APIRequestFactory
         player2 = Player(pk=2, person=person, team=team, position='GK')
         serializer = PlayerSerializer(player, context={'request': APIRequestFactory().get('/')})
         serializer2 = PlayerSerializer(player2, context={'request': APIRequestFactory().get('/')})
-        print(serializer.data)
-        print(serializer2.data)
 
     #def test2(self):
     #    TeamEventSerializer

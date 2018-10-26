@@ -2,15 +2,15 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 from app.models import Match
 from app.tests.helpers.tests_setup_base import TestsSetUpBase
-from app.tests.helpers.data_representations import PersonRepresentation, CompetitionRepresentation, MatchRepresentation
-from app.tests.helpers.common_data import coach_person
+from app.tests.helpers.data_representations import PersonRepresentation, MatchRepresentation
+from app.tests.helpers.common_data import coach_person, league_competition, tournament_competition
 
 
 class MatchTestSetUp(TestsSetUpBase):
     base_url = reverse('matches-list')
     referee = PersonRepresentation(1, 'referee')
-    competition1 = CompetitionRepresentation(1, 'league')
-    competition2 = CompetitionRepresentation(2, 'tournament')
+    competition1 = league_competition(1)
+    competition2 = tournament_competition(1)
     match1 = MatchRepresentation(1, referee.model, competition1.model)
     match2 = MatchRepresentation(2, referee.model, competition2.model)
     updated_match = MatchRepresentation(1, referee.model, competition2.model)

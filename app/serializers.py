@@ -66,7 +66,7 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
 class CompetitionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Competition
-        fields = ('id', 'name', 'type')
+        fields = ('id', 'name', 'type', 'year')
 
 
 class TeamInMatchSerializer(serializers.HyperlinkedModelSerializer):

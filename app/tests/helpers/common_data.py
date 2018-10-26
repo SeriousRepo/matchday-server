@@ -2,15 +2,15 @@ from app.tests.helpers.data_representations import *
 
 
 def league_competition(pk):
-    return CompetitionRepresentation(pk, 'league')
+    return CompetitionRepresentation(pk, 'league', 2017)
 
 
 def tournament_competition(pk):
-    return CompetitionRepresentation(pk, 'tournament')
+    return CompetitionRepresentation(pk, 'tournament', 2017)
 
 
 def wrong_type_competition(pk):
-    return CompetitionRepresentation(pk, 'wrong_type')
+    return CompetitionRepresentation(pk, 'wrong_type', 2017)
 
 
 def referee_person(pk):

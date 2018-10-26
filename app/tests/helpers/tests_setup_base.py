@@ -8,7 +8,7 @@ class TestsSetUpBase(APITestCase):
     def register_user(self, user_id=1):
         base_url = reverse('account-create')
         user = self.get_user_json(user_id)
-        self.client.post(base_url, user)
+        self.client.post(base_url, user, format='json')
 
     def get_user_json(self, user_id=1):
         return {
