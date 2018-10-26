@@ -1,13 +1,16 @@
 import os
 import django_heroku
-#from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured
 
-#try:
-#    LOGIN_EMAIL = os.environ.get('EMAIL_USER')
-#    PASSWORD_EMAIL = os.environ.get('EMAIL_PASSWORD')
-#except KeyError:
-#    error_msg = "cannot find environment variable"
-#    raise ImproperlyConfigured(error_msg)
+try:
+    DB_NAME = os.environ.get('DB_NAME')
+    DB_USER = os.environ.get('DB_USER')
+    DB_PASS = os.environ.get('DB_PASS')
+    #LOGIN_EMAIL = os.environ.get('EMAIL_USER')
+    #PASSWORD_EMAIL = os.environ.get('EMAIL_PASSWORD')
+except KeyError:
+    error_msg = "cannot find environment variable"
+    raise ImproperlyConfigured(error_msg)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -102,9 +105,9 @@ WSGI_APPLICATION = 'matchday-server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'matchday_server',
-        'USER': 'matchday_server_user',
-        'PASSWORD': 'matchday_server_password',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASS,
         'HOST': 'localhost',
         'PORT': '',
     }
