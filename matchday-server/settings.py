@@ -22,7 +22,7 @@ SECRET_KEY = '*2akpcd4dl=y$m#!!ny*l41e2-ed97q6$80vclc9n@ir_)f)cx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 ALLOWED_HOSTS = []
 
