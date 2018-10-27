@@ -35,7 +35,19 @@ $ pip3 install coreapi
 ```
 ### Run Aplication
 ```
+create postgresql database
+create database user
+$ export DB_NAME=<your database name>
+$ export DB_USER=<your database user name>
+$ export DB_PASS=<your database user password>
+$ export DJANGO_SETTINGS_MODULE=matchday-server.settings.production
 $ python3 manage.py makemigrations
 $ python3 manage.py migrate
 $ python3 manage.py runserver
+```
+
+### Run Tests
+```
+$ export DJANGO_SETTINGS_MODULE=matchday-server.settings.dev
+$ python3 manage.py test --parallel
 ```

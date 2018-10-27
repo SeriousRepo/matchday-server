@@ -27,7 +27,7 @@ class Player(models.Model):
 class Competition(models.Model):
     TypeChoices = (('league', 'league'), ('tournament', 'tournament'),)
 
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     type = models.CharField(max_length=10, choices=TypeChoices)
     year = models.IntegerField()
 
