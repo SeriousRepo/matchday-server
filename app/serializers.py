@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
+from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 from django.utils import timezone
 from app.models import *
 
@@ -66,7 +66,13 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
 class CompetitionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Competition
-        fields = ('id', 'name', 'type', 'year')
+        fields = ('id', 'name', 'type', 'area', 'year')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Competition.objects.all(),
+                fields=('name', 'year')
+            )
+        ]
 
 
 class TeamInMatchSerializer(serializers.HyperlinkedModelSerializer):

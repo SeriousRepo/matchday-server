@@ -1,3 +1,3 @@
 from .defaults import *
 
-DEBUG = True
+DEBUG = False

@@ -29,6 +29,7 @@ class Competition(models.Model):
 
     name = models.CharField(max_length=50, unique=True)
     type = models.CharField(max_length=10, choices=TypeChoices)
+    area = models.CharField(max_length=50, )
     year = models.IntegerField()
 
 
