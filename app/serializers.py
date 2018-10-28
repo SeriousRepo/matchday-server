@@ -42,7 +42,7 @@ class PersonSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ('id', 'name', 'stadium', 'city', 'crest_uri')
+        fields = ('id', 'name', 'stadium', 'city', 'crest_url')
 
 
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
