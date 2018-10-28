@@ -43,6 +43,7 @@ class Team(models.Model):
     name = models.CharField(max_length=50)
     stadium = models.CharField(max_length=50, null=True)
     city = models.CharField(max_length=50, null=True)
+    crest_uri = models.CharField(max_length=200, null=True)
 
 
 class TeamInMatch(models.Model):
