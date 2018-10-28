@@ -40,7 +40,7 @@ class TeamRepresentation:
 
 class TeamInMatchRepresentation:
     def __init__(self, pk, team, match, coach):
-        self.model = TeamInMatch(pk=pk, is_host=True, team=team, match=match, coach=coach)
+        self.model = TeamInMatch(pk=pk, is_host=False, team=team, match=match, coach=coach)
         self.json = TeamInMatchSerializer(self.model, context=context).data
 
 
