@@ -5,21 +5,19 @@ from django.contrib.auth.models import User
 class Person(models.Model):
     RoleChoices = (('coach', 'coach'), ('player', 'player'), ('referee', 'referee'),)
 
-    last_name = models.CharField(max_length=50)
-    first_name = models.CharField(max_length=50, null=True)
+    name = models.CharField(max_length=100, unique=True)
     role = models.CharField(max_length=10, choices=RoleChoices)
     birth_date = models.DateField(null=True)
     nationality = models.CharField(max_length=50, null=True)
 
 
 class Player(models.Model):
-    PositionChoices = (('GK', 'goalkeeper'), ('LB', 'left-back'),
-                       ('CB', 'centre-back'), ('RB', 'right-back'),
-                       ('LM', 'left-midfield'), ('CM', 'centre-midfield'),
-                       ('RM', 'right-midfield'), ('CF', 'centre-forward'),)
+    PositionChoices = (('Goalkeeper', 'Goalkeeper'), ('Defender', 'Defender'),
+                       ('Midfielder', 'Midfielder'), ('Attacker', 'Attacker'),)
     # ToDo fill more positions
 
-    position = models.CharField(max_length=3, choices=PositionChoices)
+    position = models.CharField(max_length=50, choices=PositionChoices)
+    shirt_number = models.IntegerField()
     team = models.ForeignKey('Team', on_delete=models.CASCADE)
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
 

@@ -21,14 +21,14 @@ class MatchRepresentation:
 
 class PersonRepresentation:
     def __init__(self, pk, role):
-        self.model = Person(pk=pk, last_name='last_name' + str(pk), first_name='first_name' + str(pk),
-                            role=role, birth_date=date(1961, 5, 13), nationality='nationality' + str(pk))
+        self.model = Person(pk=pk, name='name' + str(pk), role=role,
+                            birth_date=date(1961, 5, 13), nationality='nationality' + str(pk))
         self.json = PersonSerializer(self.model).data
 
 
 class PlayerRepresentation:
     def __init__(self, pk, team, person):
-        self.model = Player(pk=pk, position='GK', team=team, person=person)
+        self.model = Player(pk=pk, position='Attacker', shirt_number=1, team=team, person=person)
         self.json = PlayerSerializer(self.model, context=context).data
 
 

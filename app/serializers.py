@@ -36,7 +36,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
-        fields = ('id', 'last_name', 'first_name', 'role', 'birth_date', 'nationality')
+        fields = ('id', 'name', 'role', 'birth_date', 'nationality')
 
 
 class TeamSerializer(serializers.ModelSerializer):
@@ -51,7 +51,7 @@ class PlayerSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Player
-        fields = ('id', 'position', 'team', 'person')
+        fields = ('id', 'position', 'shirt_number', 'team', 'person')
 
 
 class MatchSerializer(serializers.HyperlinkedModelSerializer):
