@@ -41,7 +41,7 @@ class Match(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=50)
-    stadium = models.CharField(max_length=50, null=True)
+    stadium = models.CharField(max_length=200, null=True)
     city = models.CharField(max_length=50, null=True)
     crest_url = models.CharField(max_length=200, null=True)
 
