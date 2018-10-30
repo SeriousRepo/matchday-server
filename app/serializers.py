@@ -37,6 +37,12 @@ class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         fields = ('id', 'name', 'role', 'birth_date', 'nationality')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Person.objects.all(),
+                fields=('name', 'birth_date')
+            )
+        ]
 
 
 class TeamSerializer(serializers.ModelSerializer):
