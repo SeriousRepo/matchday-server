@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Person(models.Model):
     RoleChoices = (('coach', 'coach'), ('player', 'player'), ('referee', 'referee'),)
 
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     role = models.CharField(max_length=10, choices=RoleChoices)
     birth_date = models.DateField(null=True)
     nationality = models.CharField(max_length=50, null=True)
@@ -25,7 +25,7 @@ class Player(models.Model):
 class Competition(models.Model):
     TypeChoices = (('league', 'league'), ('tournament', 'tournament'),)
 
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     type = models.CharField(max_length=10, choices=TypeChoices)
     area = models.CharField(max_length=50)
     year = models.IntegerField()
