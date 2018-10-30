@@ -51,7 +51,7 @@ class TeamSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'stadium', 'city', 'crest_url')
         validators = [
             UniqueTogetherValidator(
-                queryset=Person.objects.all(),
+                queryset=Team.objects.all(),
                 fields=('name', 'stadium')
             )
         ]
