@@ -15,7 +15,7 @@ class Player(models.Model):
     PositionChoices = (('Goalkeeper', 'Goalkeeper'), ('Defender', 'Defender'),
                        ('Midfielder', 'Midfielder'), ('Attacker', 'Attacker'),)
 
-    position = models.CharField(max_length=50, choices=PositionChoices)
+    position = models.CharField(max_length=50, choices=PositionChoices, null=True)
     shirt_number = models.IntegerField(null=True)
     team = models.ForeignKey('Team', on_delete=models.CASCADE)
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
