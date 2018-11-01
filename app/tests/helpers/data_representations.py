@@ -28,7 +28,7 @@ class PersonRepresentation:
 
 class PlayerRepresentation:
     def __init__(self, pk, team, person):
-        self.model = Player(pk=pk, position='Attacker', shirt_number=1, team=team, person=person)
+        self.model = Player(pk=pk, position='Attacker', shirt_number=pk, team=team, person=person)
         self.json = PlayerSerializer(self.model, context=context).data
 
 

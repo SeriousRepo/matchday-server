@@ -64,6 +64,12 @@ class PlayerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Player
         fields = ('id', 'position', 'shirt_number', 'team', 'person')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Player.objects.all(),
+                fields=('position', 'shirt_number', 'team', 'person')
+            )
+        ]
 
 
 class MatchSerializer(serializers.HyperlinkedModelSerializer):

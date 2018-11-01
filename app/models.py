@@ -14,7 +14,6 @@ class Person(models.Model):
 class Player(models.Model):
     PositionChoices = (('Goalkeeper', 'Goalkeeper'), ('Defender', 'Defender'),
                        ('Midfielder', 'Midfielder'), ('Attacker', 'Attacker'),)
-    # ToDo fill more positions
 
     position = models.CharField(max_length=50, choices=PositionChoices)
     shirt_number = models.IntegerField()
