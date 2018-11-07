@@ -73,7 +73,7 @@ class PlayerSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class MatchSerializer(serializers.HyperlinkedModelSerializer):
-    main_referee = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='referee'), view_name='people-detail')
+    main_referee = serializers.HyperlinkedRelatedField(allow_null=True, queryset=Person.objects.filter(role='referee'), view_name='people-detail')
     competition = serializers.HyperlinkedRelatedField(queryset=Competition.objects.all(), view_name='competitions-detail')
 
     class Meta:
