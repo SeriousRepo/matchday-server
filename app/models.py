@@ -31,9 +31,18 @@ class Competition(models.Model):
 
 
 class Match(models.Model):
+    DurationChoices = (('regular', 'regular'), ('extra_time', 'extra_time'), ('penalty_shootout', 'penalty_shootout'))
+    StatusChoices = (('in_play', 'in_play'), ('scheduled', 'scheduled'), ('finished', 'finished'))
+
+    id = models.IntegerField(primary_key=True)
     date = models.DateTimeField()
     main_referee = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
+    duration = models.CharField(max_length=50, choices=DurationChoices, null=True)
+    stage = models.CharField(max_length=50, null=True)
+    group = models.CharField(max_length=50)
+    matchday = models.IntegerField()
+    status = models.CharField(max_length=50)
 
 
 class Team(models.Model):

@@ -14,8 +14,9 @@ class CompetitionRepresentation:
 
 class MatchRepresentation:
     def __init__(self, pk, referee, competition):
-        self.model = Match(pk=pk, date=datetime(2018, 11, 10, 20, 45),
-                           main_referee=referee, competition=competition)
+        self.model = Match(pk=pk, date=datetime(2018, 11, 10, 20, pk), matchday=pk,
+                           status='in_play', duration='regular', stage='stage',
+                           group='group', main_referee=referee, competition=competition)
         self.json = MatchSerializer(self.model, context=context).data
 
 

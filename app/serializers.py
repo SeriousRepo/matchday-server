@@ -78,7 +78,7 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Match
-        fields = ('id', 'date', 'main_referee', 'competition')
+        fields = ('id', 'date', 'matchday', 'status', 'duration', 'stage', 'group', 'main_referee', 'competition')
 
 
 class CompetitionSerializer(serializers.ModelSerializer):

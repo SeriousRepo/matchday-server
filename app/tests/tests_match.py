@@ -11,9 +11,9 @@ class MatchTestSetUp(TestsSetUpBase):
     referee = PersonRepresentation(1, 'referee')
     competition1 = league_competition(1)
     competition2 = tournament_competition(1)
-    match1 = MatchRepresentation(1, referee.model, competition1.model)
-    match2 = MatchRepresentation(2, referee.model, competition2.model)
-    updated_match = MatchRepresentation(1, referee.model, competition2.model)
+    match1 = MatchRepresentation(30, referee.model, competition1.model)
+    match2 = MatchRepresentation(50, referee.model, competition2.model)
+    updated_match = MatchRepresentation(30, referee.model, competition2.model)
 
     def post_nested_to_single(self, person=referee):
         self.register_user()
