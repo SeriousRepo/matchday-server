@@ -100,7 +100,7 @@ class TeamInMatchSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TeamInMatch
-        fields = ('id', 'is_host', 'team', 'match', 'coach')
+        fields = ('id', 'is_host', 'goals', 'team', 'match', 'coach')
         validatords = [
             UniqueTogetherValidator(
                 queryset=TeamInMatch.objects.all(),
