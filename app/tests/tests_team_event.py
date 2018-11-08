@@ -32,7 +32,7 @@ class TeamEventTestSetUp(TestsSetUpBase):
         self.post_method(reverse('people-list'), referee_person(4).json)
         self.post_method(reverse('competitions-list'), league_competition(1).json)
         self.post_method(reverse('matches-list'), match(1, referee_person(4)).json)
-        self.post_method(reverse('team_in_matchs-list'), self.team_in_match.json)
+        self.post_method(reverse('teams_in_matches-list'), self.team_in_match.json)
 
     def post_nested_to_both(self):
         self.post_nested_to_single()

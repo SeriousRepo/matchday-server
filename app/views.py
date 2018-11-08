@@ -76,7 +76,7 @@ class TeamsViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
 
 
-class TeamInMatchsViewSet(viewsets.ModelViewSet):
+class TeamsInMatchesViewSet(viewsets.ModelViewSet):
     queryset = TeamInMatch.objects.all()
     serializer_class = TeamInMatchSerializer
 

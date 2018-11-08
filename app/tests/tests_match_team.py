@@ -7,7 +7,7 @@ from app.tests.helpers.common_data import referee_person, tournament_competition
 
 
 class TeamInMatchTestSetUp(TestsSetUpBase):
-    base_url = reverse('team_in_matchs-list')
+    base_url = reverse('teams_in_matches-list')
     competition = tournament_competition(1)
     referee = referee_person(1)
     coach = coach_person(2)

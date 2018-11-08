@@ -94,14 +94,19 @@ class CompetitionSerializer(serializers.ModelSerializer):
 
 
 class TeamInMatchSerializer(serializers.HyperlinkedModelSerializer):
-    # ToDo add restriction to different teams in single match
-    team = serializers.HyperlinkedRelatedField(queryset=Team.objects.all(), view_name='teams-detail')
+    team = serializers.HyperlinkedRelatedField(queryset=Team.objects.all(), view_name='teams-detail', allow_null=True)
     match = serializers.HyperlinkedRelatedField(queryset=Match.objects.all(), view_name='matches-detail')
-    coach = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='coach'), view_name='people-detail')
+    coach = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='coach'), view_name='people-detail', allow_null=True)
 
     class Meta:
         model = TeamInMatch
         fields = ('id', 'is_host', 'team', 'match', 'coach')
+        validatords = [
+            UniqueTogetherValidator(
+                queryset=TeamInMatch.objects.all(),
+                fields=('is_host', 'team', 'match')
+            )
+        ]
 
 
 class EventInfoSerializer(serializers.HyperlinkedModelSerializer):
@@ -132,7 +137,7 @@ class MatchEventSerializer(serializers.ModelSerializer):
 class TeamEventSerializer(serializers.HyperlinkedModelSerializer):
     player = serializers.HyperlinkedRelatedField(queryset=Player.objects.all(), view_name='players-detail')
     event_participant = serializers.HyperlinkedRelatedField(queryset=Player.objects.all(), view_name='players-detail')
-    team_in_match = serializers.HyperlinkedRelatedField(queryset=TeamInMatch.objects.all(), view_name='team_in_matchs-detail')
+    team_in_match = serializers.HyperlinkedRelatedField(queryset=TeamInMatch.objects.all(), view_name='teams_in_matches-detail')
     event_info = EventInfoSerializer(required=True)
 
     class Meta:

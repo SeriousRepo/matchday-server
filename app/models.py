@@ -54,7 +54,7 @@ class Team(models.Model):
 
 class TeamInMatch(models.Model):
     is_host = models.BooleanField()
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     coach = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
 
