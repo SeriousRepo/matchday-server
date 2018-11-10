@@ -72,15 +72,6 @@ class PlayerSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
-class MatchSerializer(serializers.HyperlinkedModelSerializer):
-    main_referee = serializers.HyperlinkedRelatedField(allow_null=True, queryset=Person.objects.filter(role='referee'), view_name='people-detail')
-    competition = serializers.HyperlinkedRelatedField(queryset=Competition.objects.all(), view_name='competitions-detail')
-
-    class Meta:
-        model = Match
-        fields = ('id', 'date', 'matchday', 'status', 'duration', 'stage', 'group', 'main_referee', 'competition')
-
-
 class CompetitionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Competition
@@ -107,6 +98,16 @@ class TeamInMatchSerializer(serializers.HyperlinkedModelSerializer):
                 fields=('is_host', 'team', 'match')
             )
         ]
+
+
+class MatchSerializer(serializers.ModelSerializer):
+    main_referee = serializers.HyperlinkedRelatedField(allow_null=True, queryset=Person.objects.filter(role='referee'), view_name='people-detail')
+    competition = serializers.HyperlinkedRelatedField(queryset=Competition.objects.all(), view_name='competitions-detail')
+    teams = TeamInMatchSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Match
+        fields = ('id', 'date', 'matchday', 'status', 'duration', 'stage', 'group', 'main_referee', 'competition', 'teams')
 
 
 class EventInfoSerializer(serializers.HyperlinkedModelSerializer):
