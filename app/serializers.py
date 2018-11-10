@@ -95,13 +95,13 @@ class CompetitionSerializer(serializers.ModelSerializer):
 
 
 class TeamInMatchSerializer(serializers.HyperlinkedModelSerializer):
-    #team = serializers.HyperlinkedRelatedField(queryset=Team.objects.all(), view_name='teams-detail', allow_null=True)
+    team = serializers.HyperlinkedRelatedField(queryset=Team.objects.all(), view_name='teams-detail', allow_null=True)
     match = serializers.HyperlinkedRelatedField(queryset=Match.objects.all(), view_name='matches-detail')
     coach = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='coach'), view_name='people-detail', allow_null=True)
 
     class Meta:
         model = TeamInMatch
-        fields = ('id', 'is_host', 'goals', 'match', 'coach')
+        fields = ('id', 'is_host', 'goals', 'team', 'match', 'coach')
         validatords = [
             UniqueTogetherValidator(
                 queryset=TeamInMatch.objects.all(),
