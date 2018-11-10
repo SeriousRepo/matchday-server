@@ -75,10 +75,11 @@ class PlayerSerializer(serializers.HyperlinkedModelSerializer):
 class MatchSerializer(serializers.HyperlinkedModelSerializer):
     main_referee = serializers.HyperlinkedRelatedField(allow_null=True, queryset=Person.objects.filter(role='referee'), view_name='people-detail')
     competition = serializers.HyperlinkedRelatedField(queryset=Competition.objects.all(), view_name='competitions-detail')
+    teams = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='teams_in_matches')
 
     class Meta:
         model = Match
-        fields = ('id', 'date', 'matchday', 'status', 'duration', 'stage', 'group', 'main_referee', 'competition')
+        fields = ('id', 'date', 'matchday', 'status', 'duration', 'stage', 'group', 'main_referee', 'competition', 'teams')
 
 
 class CompetitionSerializer(serializers.ModelSerializer):
@@ -94,13 +95,13 @@ class CompetitionSerializer(serializers.ModelSerializer):
 
 
 class TeamInMatchSerializer(serializers.HyperlinkedModelSerializer):
-    team = serializers.HyperlinkedRelatedField(queryset=Team.objects.all(), view_name='teams-detail', allow_null=True)
+    #team = serializers.HyperlinkedRelatedField(queryset=Team.objects.all(), view_name='teams-detail', allow_null=True)
     match = serializers.HyperlinkedRelatedField(queryset=Match.objects.all(), view_name='matches-detail')
     coach = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='coach'), view_name='people-detail', allow_null=True)
 
     class Meta:
         model = TeamInMatch
-        fields = ('id', 'is_host', 'goals', 'team', 'match', 'coach')
+        fields = ('id', 'is_host', 'goals', 'match', 'coach')
         validatords = [
             UniqueTogetherValidator(
                 queryset=TeamInMatch.objects.all(),
