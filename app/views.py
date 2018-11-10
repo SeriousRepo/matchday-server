@@ -90,6 +90,14 @@ class TeamsInMatchesViewSet(viewsets.ModelViewSet):
     serializer_class = TeamInMatchSerializer
 
 
+class TodaysTeamInMatchesViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = TeamInMatchSerializer
+
+    def get_queryset(self):
+        todays_date = datetime.now().strftime('%Y-%m-%d')
+        return TeamInMatch.objects.filter(match__date__startswith=todays_date)
+
+
 class EventInfosViewSet(viewsets.ModelViewSet):
     queryset = EventInfo.objects.all()
     serializer_class = EventInfoSerializer
