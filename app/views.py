@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework import status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
@@ -64,6 +65,14 @@ class MatchesPerCompetitionViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         competition_id = self.kwargs['competition_id']
         return Match.objects.filter(competition=competition_id)
+
+
+class TodaysMatchesViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = MatchSerializer
+
+    def get_queryset(self):
+        todays_date = datetime.now().strftime('%Y-%m-%d')
+        return Match.objects.filter(date__startswith=todays_date)
 
 
 class CompetitionsViewSet(viewsets.ModelViewSet):
