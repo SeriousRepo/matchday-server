@@ -90,7 +90,7 @@ class TeamsPerCompetition(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         competition_id = self.kwargs['competition_id']
-        return Team.objects.filter(team_in_match__match__competition=competition_id)
+        return Team.objects.filter(team_in_match__match__competition=competition_id).distinct()
 
 
 class TeamsInMatchesViewSet(viewsets.ModelViewSet):
