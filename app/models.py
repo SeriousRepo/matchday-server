@@ -37,7 +37,7 @@ class Match(models.Model):
     id = models.IntegerField(primary_key=True)
     date = models.DateTimeField()
     main_referee = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
-    competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_query_name='match')
     duration = models.CharField(max_length=50, choices=DurationChoices, null=True)
     stage = models.CharField(max_length=50, null=True)
     group = models.CharField(max_length=50)
@@ -55,8 +55,8 @@ class Team(models.Model):
 class TeamInMatch(models.Model):
     is_host = models.BooleanField()
     goals = models.IntegerField(default=0)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
-    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name='teams')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, related_query_name='team_in_match')
+    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name='teams', related_query_name='team_in_match')
     coach = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
 
 

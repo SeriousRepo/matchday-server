@@ -21,6 +21,8 @@ router.register(r'competitions/(?P<competition_id>\d+)/matches',
                 views.MatchesPerCompetitionViewSet, base_name='matches_in_competition')
 router.register(r'competitions/(?P<competition_id>\d+)/referees',
                 views.RefereesPerCompetitionViewSet, base_name='referees_in_competition')
+router.register(r'competitions/(?P<competition_id>\d+)/teams',
+                views.TeamsPerCompetition, base_name='teams_per_competition')
 router.register(r'teams', views.TeamsViewSet, base_name='teams')
 router.register(r'teams_in_matches/today', views.TodaysTeamInMatchesViewSet, base_name='todays_team_in_matches')
 router.register(r'teams_in_matches', views.TeamsInMatchesViewSet, base_name='teams_in_matches')

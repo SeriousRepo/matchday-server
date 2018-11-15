@@ -85,6 +85,14 @@ class TeamsViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
 
 
+class TeamsPerCompetition(viewsets.ModelViewSet):
+    serializer_class = TeamSerializer
+
+    def get_queryset(self):
+        competition_id = self.kwargs['competition_id']
+        return Team.objects.filter(team_in_match__match__competition=competition_id)
+
+
 class TeamsInMatchesViewSet(viewsets.ModelViewSet):
     queryset = TeamInMatch.objects.all()
     serializer_class = TeamInMatchSerializer
