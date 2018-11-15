@@ -85,7 +85,7 @@ class TeamsViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
 
 
-class TeamsPerCompetition(viewsets.ModelViewSet):
+class TeamsPerCompetition(viewsets.ReadOnlyModelViewSet):
     serializer_class = TeamSerializer
 
     def get_queryset(self):
