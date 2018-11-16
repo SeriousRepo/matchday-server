@@ -55,7 +55,7 @@ class PlayersViewSet(viewsets.ModelViewSet):
 
 
 class MatchesViewSet(viewsets.ModelViewSet):
-    queryset = Match.objects.all()
+    queryset = Match.objects.all().order_by('date')
     serializer_class = MatchSerializer
 
 
@@ -72,7 +72,7 @@ class TodaysMatchesViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         todays_date = datetime.now().strftime('%Y-%m-%d')
-        return Match.objects.filter(date__startswith=todays_date)
+        return Match.objects.filter(date__startswith=todays_date).order_by('date')
 
 
 class CompetitionsViewSet(viewsets.ModelViewSet):
@@ -94,7 +94,7 @@ class TeamsPerCompetition(viewsets.ReadOnlyModelViewSet):
 
 
 class TeamsInMatchesViewSet(viewsets.ModelViewSet):
-    queryset = TeamInMatch.objects.all()
+    queryset = TeamInMatch.objects.all().order_by('match__date')
     serializer_class = TeamInMatchSerializer
 
 
@@ -103,7 +103,7 @@ class TodaysTeamInMatchesViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         todays_date = datetime.now().strftime('%Y-%m-%d')
-        return TeamInMatch.objects.filter(match__date__startswith=todays_date)
+        return TeamInMatch.objects.filter(match__date__startswith=todays_date).order_by('match__date')
 
 
 class EventInfosViewSet(viewsets.ModelViewSet):
