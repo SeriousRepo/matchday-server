@@ -64,7 +64,7 @@ class MatchesPerCompetitionViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         competition_id = self.kwargs['competition_id']
-        return Match.objects.filter(competition=competition_id)
+        return Match.objects.filter(competition=competition_id).order_by('date')
 
 
 class TodaysMatchesViewSet(viewsets.ReadOnlyModelViewSet):
@@ -91,6 +91,7 @@ class TeamsPerCompetition(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         competition_id = self.kwargs['competition_id']
         return Team.objects.filter(team_in_match__match__competition=competition_id).distinct().order_by('id')
+
 
 class TeamsInMatchesViewSet(viewsets.ModelViewSet):
     queryset = TeamInMatch.objects.all()
