@@ -12,14 +12,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 class CreateUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-            required=True,
-            validators=[UniqueValidator(queryset=User.objects.all())]
-            )
+        required=True,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
     username = serializers.CharField(
-            max_length=100,
-            required=True,
-            validators=[UniqueValidator(queryset=User.objects.all())]
-            )
+        max_length=100,
+        required=True,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
     password = serializers.CharField(required=True, min_length=8, write_only=True)
     date_joined = serializers.DateTimeField(default=timezone.now)
 
@@ -45,20 +45,9 @@ class PersonSerializer(serializers.ModelSerializer):
         ]
 
 
-class TeamSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Team
-        fields = ('id', 'name', 'stadium', 'city', 'crest_url')
-        validators = [
-            UniqueTogetherValidator(
-                queryset=Team.objects.all(),
-                fields=('name', 'stadium')
-            )
-        ]
-
-
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
-    person = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='player'), view_name='people-detail')
+    person = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='player'),
+                                                 view_name='people-detail')
     team = serializers.HyperlinkedRelatedField(queryset=Team.objects.all(), view_name='teams-detail')
 
     class Meta:
@@ -68,6 +57,20 @@ class PlayerSerializer(serializers.HyperlinkedModelSerializer):
             UniqueTogetherValidator(
                 queryset=Player.objects.all(),
                 fields=('position', 'shirt_number', 'team', 'person')
+            )
+        ]
+
+
+class TeamSerializer(serializers.ModelSerializer):
+    players = PlayerSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Team
+        fields = ('id', 'name', 'stadium', 'city', 'crest_url', 'players')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Team.objects.all(),
+                fields=('name', 'stadium')
             )
         ]
 
@@ -87,7 +90,8 @@ class CompetitionSerializer(serializers.ModelSerializer):
 class TeamInMatchSerializer(serializers.HyperlinkedModelSerializer):
     team = serializers.HyperlinkedRelatedField(queryset=Team.objects.all(), view_name='teams-detail', allow_null=True)
     match = serializers.HyperlinkedRelatedField(queryset=Match.objects.all(), view_name='matches-detail')
-    coach = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='coach'), view_name='people-detail', allow_null=True)
+    coach = serializers.HyperlinkedRelatedField(queryset=Person.objects.filter(role='coach'), view_name='people-detail',
+                                                allow_null=True)
 
     class Meta:
         model = TeamInMatch
@@ -101,13 +105,16 @@ class TeamInMatchSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class MatchSerializer(serializers.ModelSerializer):
-    main_referee = serializers.HyperlinkedRelatedField(allow_null=True, queryset=Person.objects.filter(role='referee'), view_name='people-detail')
-    competition = serializers.HyperlinkedRelatedField(queryset=Competition.objects.all(), view_name='competitions-detail')
+    main_referee = serializers.HyperlinkedRelatedField(allow_null=True, queryset=Person.objects.filter(role='referee'),
+                                                       view_name='people-detail')
+    competition = serializers.HyperlinkedRelatedField(queryset=Competition.objects.all(),
+                                                      view_name='competitions-detail')
     teams = TeamInMatchSerializer(many=True, read_only=True)
 
     class Meta:
         model = Match
-        fields = ('id', 'date', 'matchday', 'status', 'duration', 'stage', 'group', 'main_referee', 'competition', 'teams')
+        fields = ('id', 'date', 'matchday', 'status', 'duration',
+                  'stage', 'group', 'main_referee', 'competition', 'teams')
 
 
 class EventInfoSerializer(serializers.HyperlinkedModelSerializer):
@@ -138,7 +145,8 @@ class MatchEventSerializer(serializers.ModelSerializer):
 class TeamEventSerializer(serializers.HyperlinkedModelSerializer):
     player = serializers.HyperlinkedRelatedField(queryset=Player.objects.all(), view_name='players-detail')
     event_participant = serializers.HyperlinkedRelatedField(queryset=Player.objects.all(), view_name='players-detail')
-    team_in_match = serializers.HyperlinkedRelatedField(queryset=TeamInMatch.objects.all(), view_name='teams_in_matches-detail')
+    team_in_match = serializers.HyperlinkedRelatedField(queryset=TeamInMatch.objects.all(),
+                                                        view_name='teams_in_matches-detail')
     event_info = EventInfoSerializer(required=True)
 
     class Meta:
@@ -150,14 +158,16 @@ class TeamEventSerializer(serializers.HyperlinkedModelSerializer):
         event = EventInfoSerializer.create(EventInfoSerializer(), validated_data=event_data)
         team_event, created = TeamEvent.objects.update_or_create(event_type=validated_data.pop('event_type'),
                                                                  player=validated_data.pop('player'),
-                                                                 event_participant=validated_data.pop('event_participant'),
+                                                                 event_participant=validated_data.pop(
+                                                                     'event_participant'),
                                                                  team_in_match=validated_data.pop('team_in_match'),
                                                                  event_info=event)
         return team_event
 
     def update(self, instance, validated_data):
         validated_event_info = validated_data.get('event_info', instance.event_info)
-        event_info = EventInfoSerializer.update(EventInfoSerializer(), instance.event_info, validated_data=validated_event_info)
+        event_info = EventInfoSerializer.update(EventInfoSerializer(), instance.event_info,
+                                                validated_data=validated_event_info)
         instance.event_type = validated_data.get('event_type', instance.event_type)
         instance.player = validated_data.get('player', instance.player)
         instance.event_participant = validated_data.get('event_participant', instance.event_participant)

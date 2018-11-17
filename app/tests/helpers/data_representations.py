@@ -36,7 +36,7 @@ class PlayerRepresentation:
 class TeamRepresentation:
     def __init__(self, pk, city='city'):
         self.model = Team(pk=pk, name='name' + str(pk), stadium='stadium' + str(pk), city=city, crest_url='some_crest')
-        self.json = TeamSerializer(self.model).data
+        self.json = TeamSerializer(self.model, context=context).data
 
 
 class TeamInMatchRepresentation:
